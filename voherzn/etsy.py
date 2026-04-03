@@ -20,9 +20,9 @@ def _parse_listing(text: str) -> dict:
     if "TITEL:" in text:
         after_titel = text.split("TITEL:", 1)[1]
         if "BESCHREIBUNG:" in after_titel:
-            sections["title"] = after_titel.split("BESCHREIBUNG:", 1)[0].strip()
+            sections["title"] = after_titel.split("BESCHREIBUNG:", 1)[0].strip()[:140]
         else:
-            sections["title"] = after_titel.strip().split("\n")[0].strip()
+            sections["title"] = after_titel.strip().split("\n")[0].strip()[:140]
 
     if "BESCHREIBUNG:" in text:
         after_beschreibung = text.split("BESCHREIBUNG:", 1)[1]
@@ -34,7 +34,7 @@ def _parse_listing(text: str) -> dict:
     if "TAGS:" in text:
         after_tags = text.split("TAGS:", 1)[1].strip()
         tags = [t.strip() for t in after_tags.split(",") if t.strip()]
-        sections["tags"] = tags
+        sections["tags"] = tags[:13]
 
     return sections
 
