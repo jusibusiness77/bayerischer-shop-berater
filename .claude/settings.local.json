@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 /Users/juu777/vo-herzn-projekt/hallo.py)",
+      "Bash(curl -sIL \"https://github.com/google/fonts/raw/main/ofl/lato/Lato-Light.ttf\" | grep -E \"HTTP|location\" | head -6)",
+      "Bash(curl -sI \"https://raw.githubusercontent.com/google/fonts/main/ofl/eb%20garamond/EBGaramond-Regular.ttf\" | head -3 && curl -sI \"https://raw.githubusercontent.com/google/fonts/main/ofl/ebgaramond/EBGaramond-Regular.ttf\" | head -3 && curl -sI \"https://raw.githubusercontent.com/google/fonts/main/ofl/lato/Lato-Light.ttf\" | head -3)",
+      "Bash(curl -sI \"https://raw.githubusercontent.com/google/fonts/main/ofl/cinzel/Cinzel%5Bwght%5D.ttf\" | head -3 && curl -sI \"https://raw.githubusercontent.com/google/fonts/main/ofl/lato/Lato-Regular.ttf\" | head -3)",
+      "Bash(python3 create_logo.py)",
+      "Bash(python3 -c \"\nfrom PIL import Image\nimg = Image.open\\('/Users/juu777/Desktop/voherzn_logo.png'\\)\nimg = img.convert\\('RGB'\\)\nimg.save\\('/Users/juu777/Desktop/voherzn_logo.jpg', 'JPEG', quality=95\\)\nprint\\('Gespeichert:', img.size\\)\n\")",
+      "Bash(python3 -c \"\nfrom PIL import Image\n\nimg = Image.open\\('/Users/juu777/Desktop/voherzn_logo.png'\\)\nsize = 800\nsquare = Image.new\\('RGB', \\(size, size\\), '#FAF0F2'\\)\nx = \\(size - img.width\\) // 2\ny = \\(size - img.height\\) // 2\nsquare.paste\\(img, \\(x, y\\)\\)\nsquare.save\\('/Users/juu777/Desktop/voherzn_logo_quadrat.jpg', 'JPEG', quality=95\\)\nprint\\('Gespeichert: 800x800px'\\)\n\")",
+      "Bash(echo \"Neu eingetroffen ✨ Handgefertigte Holzschilder jetzt im Shop – jedes ein Unikat, liebevoll graviert und mit Herz gemacht.\" | python3 instagram_post.py)",
+      "Bash(python3 -c \"\nfrom instagram_post import create_post\npath = create_post\\('Neu eingetroffen ✨ Handgefertigte Holzschilder jetzt im Shop – jedes ein Unikat, liebevoll graviert und mit Herz gemacht.'\\)\nprint\\('Gespeichert:', path\\)\n\")",
+      "Bash(pip3 install pilmoji --quiet && python3 -c \"import pilmoji; print\\('pilmoji', pilmoji.__version__\\)\")",
+      "Bash(curl -sI \"https://raw.githubusercontent.com/googlefonts/noto-emoji/main/fonts/NotoColorEmoji.ttf\" | head -3)",
+      "Bash(curl -sIL \"https://github.com/googlefonts/noto-emoji/releases/download/v2.042/Noto-COLRv1.ttf\" 2>/dev/null | grep \"HTTP/\" | tail -1)",
+      "Bash(curl -sL \"https://api.github.com/repos/googlefonts/noto-emoji/releases/latest\" | python3 -c \"import sys,json; r=json.load\\(sys.stdin\\); [print\\(a['browser_download_url']\\) for a in r.get\\('assets',[]\\)]\")",
+      "Bash(brew list | grep -i noto 2>/dev/null; brew search noto-emoji 2>/dev/null | head -5)",
+      "Bash(brew install --cask font-noto-color-emoji 2>&1 | tail -5 || brew install font-noto-emoji 2>&1 | tail -5)",
+      "Bash(python3 -c \"\nfrom instagram_post import create_post\npath = create_post\\('Neu eingetroffen ✨ Handgefertigte Holzschilder jetzt im Shop – jedes ein Unikat, liebevoll graviert und mit Herz gemacht. 🌸'\\)\nprint\\('Gespeichert:', path\\)\n\" 2>&1)",
+      "Bash(python3 -c \"\nfrom instagram_post import create_post\npath = create_post\\('Neu eingetroffen ✨ Handgefertigte Holzschilder jetzt im Shop – jedes ein Unikat, liebevoll graviert und mit Herz gemacht.'\\)\nprint\\('Gespeichert:', path\\)\n\" 2>&1 | grep -v Warning | grep -v warn)",
+      "Bash(python3 -c \"\nfrom instagram_post import create_post\npath = create_post\\('Neu eingetroffen ✨ Handgefertigte Holzschilder jetzt im Shop.'\\)\nprint\\('Gespeichert:', path\\)\n\" 2>&1 | grep -v Warning | grep -v warn)"
+    ]
+  }
+}

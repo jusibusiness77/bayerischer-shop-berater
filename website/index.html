@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vo herzn — Handgemachte Deko & Taschen aus Bayern</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS Animationen -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#fdf6ee',
+            rose:  '#c9837a',
+            roseDark: '#a8635b',
+            brown: '#7c5c4a',
+            brownLight: '#d4b8a8',
+            dark: '#2c1f1a',
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            body: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background-color: #fdf6ee; color: #2c1f1a; }
+
+    .hero-bg {
+      background: linear-gradient(135deg, #f5e6d8 0%, #edddd4 40%, #e8cfc4 100%);
+    }
+
+    .parallax-hero {
+      background-image: url('https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(124, 92, 74, 0.15);
+    }
+
+    .btn-primary {
+      background-color: #c9837a;
+      color: white;
+      padding: 0.875rem 2rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background-color: #a8635b;
+      transform: scale(1.03);
+    }
+
+    .nav-link {
+      position: relative;
+      color: #2c1f1a;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: #c9837a;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:hover { color: #c9837a; }
+
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: block; }
+
+    .hero-overlay {
+      background: linear-gradient(to bottom, rgba(253,246,238,0.85) 0%, rgba(253,246,238,0.6) 50%, rgba(253,246,238,0.85) 100%);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-brownLight/30">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#hero" class="font-display text-2xl font-bold text-rose tracking-wide">
+        vo herzn
+      </a>
+
+      <!-- Desktop Links -->
+      <ul class="hidden md:flex gap-8 items-center">
+        <li><a href="#produkte" class="nav-link">Produkte</a></li>
+        <li><a href="#ueber-uns" class="nav-link">Über uns</a></li>
+        <li><a href="#vorteile" class="nav-link">Besonderheiten</a></li>
+        <li><a href="#kontakt" class="btn-primary text-sm !py-2 !px-5">Kontakt</a></li>
+      </ul>
+
+      <!-- Hamburger -->
+      <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menü öffnen">
+        <span class="w-6 h-0.5 bg-dark transition-all duration-300" id="bar1"></span>
+        <span class="w-6 h-0.5 bg-dark transition-all duration-300" id="bar2"></span>
+        <span class="w-6 h-0.5 bg-dark transition-all duration-300" id="bar3"></span>
+      </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden bg-cream border-t border-brownLight/30">
+      <ul class="flex flex-col px-6 py-4 gap-4">
+        <li><a href="#produkte" class="nav-link block py-1" onclick="closeMobileMenu()">Produkte</a></li>
+        <li><a href="#ueber-uns" class="nav-link block py-1" onclick="closeMobileMenu()">Über uns</a></li>
+        <li><a href="#vorteile" class="nav-link block py-1" onclick="closeMobileMenu()">Besonderheiten</a></li>
+        <li><a href="#kontakt" class="btn-primary text-sm text-center mt-2" onclick="closeMobileMenu()">Kontakt</a></li>
+      </ul>
+    </div>
+  </header>
+
+
+  <!-- ===== HERO ===== -->
+  <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <!-- Hintergrund -->
+    <div class="absolute inset-0 parallax-hero"></div>
+    <div class="absolute inset-0 hero-overlay"></div>
+
+    <!-- Dekorative Kreise -->
+    <div class="absolute top-20 right-10 w-64 h-64 rounded-full bg-rose/10 blur-3xl"></div>
+    <div class="absolute bottom-20 left-10 w-48 h-48 rounded-full bg-brownLight/20 blur-2xl"></div>
+
+    <!-- Inhalt -->
+    <div class="relative z-10 text-center px-6 max-w-3xl mx-auto">
+      <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-4" data-aos="fade-down" data-aos-delay="100">
+        ✦ Handgemacht aus dem Herzen Bayerns ✦
+      </p>
+      <h1 class="font-display text-5xl md:text-7xl font-bold text-dark leading-tight mb-6" data-aos="fade-up" data-aos-delay="200">
+        Mit Liebe <br><span class="text-rose">gemacht.</span>
+      </h1>
+      <p class="text-lg md:text-xl text-brown mb-10 leading-relaxed" data-aos="fade-up" data-aos-delay="350">
+        Einzigartige Deko und Taschen — handgefertigt, mit Herz und bayerischer Seele.
+        Jedes Stück ein Unikat, das Wärme in dein Zuhause bringt.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="450">
+        <a href="#produkte" class="btn-primary">Produkte entdecken</a>
+        <a href="#kontakt" class="border-2 border-rose text-rose font-semibold py-3.5 px-8 rounded-full hover:bg-rose hover:text-white transition-all duration-300 inline-block">
+          Kontakt aufnehmen
+        </a>
+      </div>
+    </div>
+
+    <!-- Scroll-Indikator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce" data-aos="fade-up" data-aos-delay="600">
+      <svg class="w-6 h-6 text-rose" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </div>
+  </section>
+
+
+  <!-- ===== PRODUKTE ===== -->
+  <section id="produkte" class="py-24 px-6 bg-white">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-3" data-aos="fade-down">Was wir machen</p>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-dark" data-aos="fade-up">Unsere Produkte</h2>
+        <p class="text-brown mt-4 max-w-xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+          Alles handgefertigt — kein Stück wie das andere. Made with love, right here in Bayern.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- Karte 1: Deko -->
+        <div class="card-hover bg-cream rounded-3xl p-8 text-center" data-aos="fade-up" data-aos-delay="0">
+          <div class="text-5xl mb-5">🌿</div>
+          <h3 class="font-display text-2xl font-bold text-dark mb-3">Handgemachte Deko</h3>
+          <p class="text-brown leading-relaxed">
+            Kränze, Gestecke, Tischdekorationen und saisonale Arrangements — jedes Stück mit Sorgfalt und Liebe zum Detail gefertigt.
+          </p>
+          <div class="mt-6 w-12 h-0.5 bg-rose mx-auto"></div>
+        </div>
+
+        <!-- Karte 2: Taschen -->
+        <div class="card-hover bg-cream rounded-3xl p-8 text-center" data-aos="fade-up" data-aos-delay="150">
+          <div class="text-5xl mb-5">👜</div>
+          <h3 class="font-display text-2xl font-bold text-dark mb-3">Handgemachte Taschen</h3>
+          <p class="text-brown leading-relaxed">
+            Praktische und stilvolle Taschen aus hochwertigen Materialien — genäht mit Leidenschaft, designed für den Alltag.
+          </p>
+          <div class="mt-6 w-12 h-0.5 bg-rose mx-auto"></div>
+        </div>
+
+        <!-- Karte 3: Sonderanfertigung -->
+        <div class="card-hover bg-cream rounded-3xl p-8 text-center" data-aos="fade-up" data-aos-delay="300">
+          <div class="text-5xl mb-5">💝</div>
+          <h3 class="font-display text-2xl font-bold text-dark mb-3">Auf Bestellung</h3>
+          <p class="text-brown leading-relaxed">
+            Du hast eine besondere Idee? Wir fertigen gerne individuelle Stücke auf Wunsch — perfekt als persönliches Geschenk.
+          </p>
+          <div class="mt-6 w-12 h-0.5 bg-rose mx-auto"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== ÜBER UNS ===== -->
+  <section id="ueber-uns" class="py-24 px-6 bg-cream">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+
+      <!-- Text -->
+      <div data-aos="fade-right">
+        <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-3">Unsere Geschichte</p>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-dark mb-6">Vo herzn — <br>von Herzen.</h2>
+        <p class="text-brown leading-relaxed mb-5">
+          Hinter vo herzn steckt echte Leidenschaft: ein kleines Gewerbe aus dem Herzen Bayerns, das mit viel Liebe, Geduld und Kreativität arbeitet.
+        </p>
+        <p class="text-brown leading-relaxed mb-5">
+          Jedes Produkt wird von Hand gefertigt — mit ausgewählten Materialien und einem Gespür für das Besondere. Wir glauben daran, dass handgemachte Dinge eine Seele haben, die man spürt.
+        </p>
+        <p class="text-brown leading-relaxed mb-8">
+          Ob als Geschenk, zur Heimverschönerung oder einfach als kleines Dankeschön — bei vo herzn findest du Stücke, die bleiben.
+        </p>
+        <a href="#kontakt" class="btn-primary">Schreib uns</a>
+      </div>
+
+      <!-- Bild / Grafik -->
+      <div class="relative" data-aos="fade-left">
+        <div class="bg-gradient-to-br from-brownLight/40 to-rose/20 rounded-3xl h-80 md:h-96 flex items-center justify-center relative overflow-hidden">
+          <div class="text-center">
+            <div class="text-8xl mb-4">🧵</div>
+            <p class="font-display text-xl text-brown font-semibold">Handgemacht mit Herz</p>
+            <p class="text-rose text-sm mt-1">aus Bayern ♥</p>
+          </div>
+          <!-- Deko-Elemente -->
+          <div class="absolute top-4 right-4 w-16 h-16 rounded-full bg-rose/20"></div>
+          <div class="absolute bottom-6 left-6 w-10 h-10 rounded-full bg-brownLight/40"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ===== VORTEILE ===== -->
+  <section id="vorteile" class="py-24 px-6 bg-rose">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <p class="text-white/70 font-semibold tracking-widest uppercase text-sm mb-3" data-aos="fade-down">Warum vo herzn</p>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-white" data-aos="fade-up">Das macht uns besonders</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <div class="text-center" data-aos="fade-up" data-aos-delay="0">
+          <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl">🤲</div>
+          <h3 class="font-display text-xl font-bold text-white mb-3">100% Handarbeit</h3>
+          <p class="text-white/80 leading-relaxed">Kein Fließband, keine Massenware. Jedes Stück wird mit der Hand gefertigt und mit Liebe zum Detail vollendet.</p>
+        </div>
+
+        <div class="text-center" data-aos="fade-up" data-aos-delay="150">
+          <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl">🏔️</div>
+          <h3 class="font-display text-xl font-bold text-white mb-3">Aus dem Herzen Bayerns</h3>
+          <p class="text-white/80 leading-relaxed">Regional verwurzelt, mit bayerischer Seele. Unsere Produkte tragen die Wärme und den Charakter unserer Heimat in sich.</p>
+        </div>
+
+        <div class="text-center" data-aos="fade-up" data-aos-delay="300">
+          <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl">🎁</div>
+          <h3 class="font-display text-xl font-bold text-white mb-3">Jedes Stück ein Unikat</h3>
+          <p class="text-white/80 leading-relaxed">Keine zwei Produkte sind gleich. Du bekommst etwas wirklich Einzigartiges — perfekt auch als persönliches Geschenk.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== KONTAKT ===== -->
+  <section id="kontakt" class="py-24 px-6 bg-white">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-16">
+        <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-3" data-aos="fade-down">Meld dich bei uns</p>
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-dark" data-aos="fade-up">Kontakt</h2>
+        <p class="text-brown mt-4 max-w-xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+          Fragen, Bestellungen oder einfach eine nette Nachricht — wir freuen uns von dir zu hören.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+
+        <!-- Formular -->
+        <div data-aos="fade-right">
+          <form class="space-y-5" onsubmit="handleSubmit(event)">
+            <div>
+              <label class="block text-sm font-semibold text-dark mb-1.5">Dein Name</label>
+              <input type="text" placeholder="Max Mustermann" required
+                class="w-full border border-brownLight rounded-xl px-4 py-3 text-dark bg-cream focus:outline-none focus:border-rose transition-colors">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-dark mb-1.5">E-Mail</label>
+              <input type="email" placeholder="deine@email.de" required
+                class="w-full border border-brownLight rounded-xl px-4 py-3 text-dark bg-cream focus:outline-none focus:border-rose transition-colors">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-dark mb-1.5">Nachricht</label>
+              <textarea rows="5" placeholder="Deine Nachricht an uns..." required
+                class="w-full border border-brownLight rounded-xl px-4 py-3 text-dark bg-cream focus:outline-none focus:border-rose transition-colors resize-none"></textarea>
+            </div>
+            <button type="submit" class="btn-primary w-full text-center">
+              Nachricht senden ✉️
+            </button>
+            <p class="text-xs text-brown/60 text-center">* Das Formular benötigt noch ein Backend zum Versenden.</p>
+          </form>
+        </div>
+
+        <!-- Kontaktinfo -->
+        <div class="space-y-8" data-aos="fade-left">
+          <div class="bg-cream rounded-2xl p-6">
+            <div class="flex items-start gap-4">
+              <div class="text-2xl">📍</div>
+              <div>
+                <h4 class="font-semibold text-dark mb-1">Standort</h4>
+                <p class="text-brown">Herz Bayerns, Deutschland</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-cream rounded-2xl p-6">
+            <div class="flex items-start gap-4">
+              <div class="text-2xl">📸</div>
+              <div>
+                <h4 class="font-semibold text-dark mb-1">Social Media</h4>
+                <p class="text-brown">Folge uns auf Instagram für aktuelle Produkte und neue Kreationen!</p>
+                <a href="#" class="text-rose font-semibold hover:text-roseDark transition-colors mt-1 inline-block">@vo.herzn →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-cream rounded-2xl p-6">
+            <div class="flex items-start gap-4">
+              <div class="text-2xl">⏰</div>
+              <div>
+                <h4 class="font-semibold text-dark mb-1">Antwortzeit</h4>
+                <p class="text-brown">Wir melden uns in der Regel innerhalb von 24–48 Stunden bei dir.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-dark text-white py-12 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div>
+          <p class="font-display text-2xl font-bold text-rose">vo herzn</p>
+          <p class="text-white/50 text-sm mt-1">Handgemacht aus Bayern ♥</p>
+        </div>
+        <nav class="flex gap-6 flex-wrap justify-center">
+          <a href="#produkte" class="text-white/60 hover:text-white transition-colors text-sm">Produkte</a>
+          <a href="#ueber-uns" class="text-white/60 hover:text-white transition-colors text-sm">Über uns</a>
+          <a href="#vorteile" class="text-white/60 hover:text-white transition-colors text-sm">Besonderheiten</a>
+          <a href="#kontakt" class="text-white/60 hover:text-white transition-colors text-sm">Kontakt</a>
+          <a href="#" class="text-white/60 hover:text-white transition-colors text-sm">Impressum</a>
+        </nav>
+      </div>
+      <div class="border-t border-white/10 mt-8 pt-8 text-center">
+        <p class="text-white/40 text-sm">© 2025 vo herzn. Alle Rechte vorbehalten.</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    // AOS initialisieren
+    AOS.init({ duration: 700, once: true, offset: 80 });
+
+    // Hamburger Menü
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const bar1 = document.getElementById('bar1');
+    const bar2 = document.getElementById('bar2');
+    const bar3 = document.getElementById('bar3');
+
+    hamburger.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+      // X-Animation
+      if (mobileMenu.classList.contains('open')) {
+        bar1.style.transform = 'translateY(8px) rotate(45deg)';
+        bar2.style.opacity = '0';
+        bar3.style.transform = 'translateY(-8px) rotate(-45deg)';
+      } else {
+        bar1.style.transform = '';
+        bar2.style.opacity = '';
+        bar3.style.transform = '';
+      }
+    });
+
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('open');
+      bar1.style.transform = '';
+      bar2.style.opacity = '';
+      bar3.style.transform = '';
+    }
+
+    // Formular
+    function handleSubmit(e) {
+      e.preventDefault();
+      alert('Danke für deine Nachricht! ♥\n\nHinweis: Das Formular benötigt noch ein Backend, um Nachrichten wirklich zu versenden.');
+    }
+
+    // Header beim Scrollen
+    const header = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header.style.boxShadow = '0 4px 20px rgba(44,31,26,0.08)';
+      } else {
+        header.style.boxShadow = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>
