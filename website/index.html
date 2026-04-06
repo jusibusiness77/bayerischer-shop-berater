@@ -3,16 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>vo herzn — Handgemachte Deko & Taschen aus Bayern</title>
+  <title>vo herzn — Etsy Listing Generator</title>
 
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- AOS Animationen -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <script>
@@ -21,7 +16,7 @@
         extend: {
           colors: {
             cream: '#fdf6ee',
-            rose:  '#c9837a',
+            rose: '#c9837a',
             roseDark: '#a8635b',
             brown: '#7c5c4a',
             brownLight: '#d4b8a8',
@@ -40,54 +35,18 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'Inter', sans-serif; background-color: #fdf6ee; color: #2c1f1a; }
 
-    .hero-bg {
-      background: linear-gradient(135deg, #f5e6d8 0%, #edddd4 40%, #e8cfc4 100%);
-    }
-
-    .parallax-hero {
-      background-image: url('https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=1600&q=80');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-    }
-
-    .card-hover {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .card-hover:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 40px rgba(124, 92, 74, 0.15);
-    }
-
     .btn-primary {
-      background-color: #c9837a;
-      color: white;
-      padding: 0.875rem 2rem;
-      border-radius: 9999px;
-      font-weight: 600;
+      background-color: #c9837a; color: white; padding: 0.875rem 2rem;
+      border-radius: 9999px; font-weight: 600;
       transition: background-color 0.3s ease, transform 0.2s ease;
       display: inline-block;
     }
-    .btn-primary:hover {
-      background-color: #a8635b;
-      transform: scale(1.03);
-    }
+    .btn-primary:hover { background-color: #a8635b; transform: scale(1.03); }
 
-    .nav-link {
-      position: relative;
-      color: #2c1f1a;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
+    .nav-link { position: relative; color: #2c1f1a; font-weight: 500; transition: color 0.2s; }
     .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background-color: #c9837a;
-      transition: width 0.3s ease;
+      content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px;
+      background-color: #c9837a; transition: width 0.3s ease;
     }
     .nav-link:hover::after { width: 100%; }
     .nav-link:hover { color: #c9837a; }
@@ -95,356 +54,541 @@
     #mobile-menu { display: none; }
     #mobile-menu.open { display: block; }
 
-    .hero-overlay {
-      background: linear-gradient(to bottom, rgba(253,246,238,0.85) 0%, rgba(253,246,238,0.6) 50%, rgba(253,246,238,0.85) 100%);
+    .drop-zone {
+      border: 3px dashed #d4b8a8; border-radius: 1.5rem;
+      transition: all 0.3s ease; cursor: pointer;
     }
+    .drop-zone.dragover { border-color: #c9837a; background-color: rgba(201,131,122,0.08); transform: scale(1.01); }
+
+    .listing-card { transition: all 0.3s ease; }
+    .listing-card:hover { box-shadow: 0 10px 30px rgba(124, 92, 74, 0.12); }
+
+    .copy-btn {
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .copy-group:hover .copy-btn { opacity: 1; }
+
+    .tag-pill {
+      display: inline-block; background-color: rgba(201,131,122,0.15);
+      color: #a8635b; padding: 0.25rem 0.75rem; border-radius: 9999px;
+      font-size: 0.8rem; font-weight: 500; cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .tag-pill:hover { background-color: rgba(201,131,122,0.3); }
+
+    .spinner { border: 3px solid #d4b8a8; border-top: 3px solid #c9837a; border-radius: 50%;
+      width: 20px; height: 20px; animation: spin 0.8s linear infinite; display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .progress-ring { transition: stroke-dashoffset 0.5s ease; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in { animation: fadeInUp 0.5s ease forwards; }
   </style>
 </head>
 
 <body>
 
-  <!-- ===== NAVIGATION ===== -->
+  <!-- NAVIGATION -->
   <header class="fixed top-0 left-0 right-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-brownLight/30">
     <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-      <!-- Logo -->
-      <a href="#hero" class="font-display text-2xl font-bold text-rose tracking-wide">
-        vo herzn
-      </a>
-
-      <!-- Desktop Links -->
+      <a href="#" class="font-display text-2xl font-bold text-rose tracking-wide">vo herzn</a>
       <ul class="hidden md:flex gap-8 items-center">
-        <li><a href="#produkte" class="nav-link">Produkte</a></li>
-        <li><a href="#ueber-uns" class="nav-link">Über uns</a></li>
-        <li><a href="#vorteile" class="nav-link">Besonderheiten</a></li>
-        <li><a href="#kontakt" class="btn-primary text-sm !py-2 !px-5">Kontakt</a></li>
+        <li><a href="#generator" class="nav-link">Listing Generator</a></li>
+        <li><a href="#ueber-uns" class="nav-link">Ueber uns</a></li>
+        <li><a href="#kontakt" class="nav-link">Kontakt</a></li>
       </ul>
-
-      <!-- Hamburger -->
-      <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menü öffnen">
+      <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menu oeffnen">
         <span class="w-6 h-0.5 bg-dark transition-all duration-300" id="bar1"></span>
         <span class="w-6 h-0.5 bg-dark transition-all duration-300" id="bar2"></span>
         <span class="w-6 h-0.5 bg-dark transition-all duration-300" id="bar3"></span>
       </button>
     </nav>
-
-    <!-- Mobile Menu -->
     <div id="mobile-menu" class="md:hidden bg-cream border-t border-brownLight/30">
       <ul class="flex flex-col px-6 py-4 gap-4">
-        <li><a href="#produkte" class="nav-link block py-1" onclick="closeMobileMenu()">Produkte</a></li>
-        <li><a href="#ueber-uns" class="nav-link block py-1" onclick="closeMobileMenu()">Über uns</a></li>
-        <li><a href="#vorteile" class="nav-link block py-1" onclick="closeMobileMenu()">Besonderheiten</a></li>
-        <li><a href="#kontakt" class="btn-primary text-sm text-center mt-2" onclick="closeMobileMenu()">Kontakt</a></li>
+        <li><a href="#generator" class="nav-link block py-1" onclick="closeMobileMenu()">Listing Generator</a></li>
+        <li><a href="#ueber-uns" class="nav-link block py-1" onclick="closeMobileMenu()">Ueber uns</a></li>
+        <li><a href="#kontakt" class="nav-link block py-1" onclick="closeMobileMenu()">Kontakt</a></li>
       </ul>
     </div>
   </header>
 
 
-  <!-- ===== HERO ===== -->
-  <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-    <!-- Hintergrund -->
-    <div class="absolute inset-0 parallax-hero"></div>
-    <div class="absolute inset-0 hero-overlay"></div>
-
-    <!-- Dekorative Kreise -->
-    <div class="absolute top-20 right-10 w-64 h-64 rounded-full bg-rose/10 blur-3xl"></div>
-    <div class="absolute bottom-20 left-10 w-48 h-48 rounded-full bg-brownLight/20 blur-2xl"></div>
-
-    <!-- Inhalt -->
-    <div class="relative z-10 text-center px-6 max-w-3xl mx-auto">
-      <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-4" data-aos="fade-down" data-aos-delay="100">
-        ✦ Handgemacht aus dem Herzen Bayerns ✦
-      </p>
-      <h1 class="font-display text-5xl md:text-7xl font-bold text-dark leading-tight mb-6" data-aos="fade-up" data-aos-delay="200">
-        Mit Liebe <br><span class="text-rose">gemacht.</span>
+  <!-- HERO -->
+  <section class="pt-32 pb-16 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-4" data-aos="fade-down">Vo Herz'n Etsy Tool</p>
+      <h1 class="font-display text-4xl md:text-6xl font-bold text-dark leading-tight mb-6" data-aos="fade-up">
+        Etsy Listings <br><span class="text-rose">auf Knopfdruck.</span>
       </h1>
-      <p class="text-lg md:text-xl text-brown mb-10 leading-relaxed" data-aos="fade-up" data-aos-delay="350">
-        Einzigartige Deko und Taschen — handgefertigt, mit Herz und bayerischer Seele.
-        Jedes Stück ein Unikat, das Wärme in dein Zuhause bringt.
+      <p class="text-lg text-brown mb-4 max-w-2xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="100">
+        Lade deine Produktfotos hoch und bekomme fertige Etsy-Texte &mdash;
+        Titel, Beschreibung und 13 Tags, automatisch an die Saison angepasst.
       </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="450">
-        <a href="#produkte" class="btn-primary">Produkte entdecken</a>
-        <a href="#kontakt" class="border-2 border-rose text-rose font-semibold py-3.5 px-8 rounded-full hover:bg-rose hover:text-white transition-all duration-300 inline-block">
-          Kontakt aufnehmen
-        </a>
-      </div>
-    </div>
-
-    <!-- Scroll-Indikator -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce" data-aos="fade-up" data-aos-delay="600">
-      <svg class="w-6 h-6 text-rose" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-      </svg>
-    </div>
-  </section>
-
-
-  <!-- ===== PRODUKTE ===== -->
-  <section id="produkte" class="py-24 px-6 bg-white">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-16">
-        <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-3" data-aos="fade-down">Was wir machen</p>
-        <h2 class="font-display text-4xl md:text-5xl font-bold text-dark" data-aos="fade-up">Unsere Produkte</h2>
-        <p class="text-brown mt-4 max-w-xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-          Alles handgefertigt — kein Stück wie das andere. Made with love, right here in Bayern.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-        <!-- Karte 1: Deko -->
-        <div class="card-hover bg-cream rounded-3xl p-8 text-center" data-aos="fade-up" data-aos-delay="0">
-          <div class="text-5xl mb-5">🌿</div>
-          <h3 class="font-display text-2xl font-bold text-dark mb-3">Handgemachte Deko</h3>
-          <p class="text-brown leading-relaxed">
-            Kränze, Gestecke, Tischdekorationen und saisonale Arrangements — jedes Stück mit Sorgfalt und Liebe zum Detail gefertigt.
-          </p>
-          <div class="mt-6 w-12 h-0.5 bg-rose mx-auto"></div>
-        </div>
-
-        <!-- Karte 2: Taschen -->
-        <div class="card-hover bg-cream rounded-3xl p-8 text-center" data-aos="fade-up" data-aos-delay="150">
-          <div class="text-5xl mb-5">👜</div>
-          <h3 class="font-display text-2xl font-bold text-dark mb-3">Handgemachte Taschen</h3>
-          <p class="text-brown leading-relaxed">
-            Praktische und stilvolle Taschen aus hochwertigen Materialien — genäht mit Leidenschaft, designed für den Alltag.
-          </p>
-          <div class="mt-6 w-12 h-0.5 bg-rose mx-auto"></div>
-        </div>
-
-        <!-- Karte 3: Sonderanfertigung -->
-        <div class="card-hover bg-cream rounded-3xl p-8 text-center" data-aos="fade-up" data-aos-delay="300">
-          <div class="text-5xl mb-5">💝</div>
-          <h3 class="font-display text-2xl font-bold text-dark mb-3">Auf Bestellung</h3>
-          <p class="text-brown leading-relaxed">
-            Du hast eine besondere Idee? Wir fertigen gerne individuelle Stücke auf Wunsch — perfekt als persönliches Geschenk.
-          </p>
-          <div class="mt-6 w-12 h-0.5 bg-rose mx-auto"></div>
-        </div>
-
+      <!-- Saison-Badge -->
+      <div id="season-badge" class="inline-flex items-center gap-2 bg-white rounded-full px-5 py-2.5 shadow-sm border border-brownLight/30 mt-2" data-aos="fade-up" data-aos-delay="200">
+        <span id="season-icon" class="text-xl">&#127800;</span>
+        <span id="season-text" class="text-sm font-medium text-brown">Saison wird geladen...</span>
       </div>
     </div>
   </section>
 
 
-  <!-- ===== ÜBER UNS ===== -->
-  <section id="ueber-uns" class="py-24 px-6 bg-cream">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+  <!-- GENERATOR -->
+  <section id="generator" class="py-12 px-6">
+    <div class="max-w-4xl mx-auto">
 
-      <!-- Text -->
-      <div data-aos="fade-right">
-        <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-3">Unsere Geschichte</p>
-        <h2 class="font-display text-4xl md:text-5xl font-bold text-dark mb-6">Vo herzn — <br>von Herzen.</h2>
-        <p class="text-brown leading-relaxed mb-5">
-          Hinter vo herzn steckt echte Leidenschaft: ein kleines Gewerbe aus dem Herzen Bayerns, das mit viel Liebe, Geduld und Kreativität arbeitet.
-        </p>
-        <p class="text-brown leading-relaxed mb-5">
-          Jedes Produkt wird von Hand gefertigt — mit ausgewählten Materialien und einem Gespür für das Besondere. Wir glauben daran, dass handgemachte Dinge eine Seele haben, die man spürt.
-        </p>
-        <p class="text-brown leading-relaxed mb-8">
-          Ob als Geschenk, zur Heimverschönerung oder einfach als kleines Dankeschön — bei vo herzn findest du Stücke, die bleiben.
-        </p>
-        <a href="#kontakt" class="btn-primary">Schreib uns</a>
+      <!-- Drop Zone -->
+      <div id="drop-zone" class="drop-zone bg-white p-12 text-center" data-aos="fade-up">
+        <input type="file" id="file-input" multiple accept="image/jpeg,image/png,image/webp" class="hidden">
+        <div class="text-5xl mb-4">&#128247;</div>
+        <p class="font-display text-xl font-semibold text-dark mb-2">Produktfotos hochladen</p>
+        <p class="text-brown mb-6">Zieh bis zu 10 Fotos hierher oder klick zum Auswaehlen</p>
+        <button onclick="document.getElementById('file-input').click()" class="btn-primary text-sm !py-2.5 !px-6">
+          Fotos auswaehlen
+        </button>
       </div>
 
-      <!-- Bild / Grafik -->
-      <div class="relative" data-aos="fade-left">
-        <div class="bg-gradient-to-br from-brownLight/40 to-rose/20 rounded-3xl h-80 md:h-96 flex items-center justify-center relative overflow-hidden">
-          <div class="text-center">
-            <div class="text-8xl mb-4">🧵</div>
-            <p class="font-display text-xl text-brown font-semibold">Handgemacht mit Herz</p>
-            <p class="text-rose text-sm mt-1">aus Bayern ♥</p>
-          </div>
-          <!-- Deko-Elemente -->
-          <div class="absolute top-4 right-4 w-16 h-16 rounded-full bg-rose/20"></div>
-          <div class="absolute bottom-6 left-6 w-10 h-10 rounded-full bg-brownLight/40"></div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ===== VORTEILE ===== -->
-  <section id="vorteile" class="py-24 px-6 bg-rose">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-16">
-        <p class="text-white/70 font-semibold tracking-widest uppercase text-sm mb-3" data-aos="fade-down">Warum vo herzn</p>
-        <h2 class="font-display text-4xl md:text-5xl font-bold text-white" data-aos="fade-up">Das macht uns besonders</h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-        <div class="text-center" data-aos="fade-up" data-aos-delay="0">
-          <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl">🤲</div>
-          <h3 class="font-display text-xl font-bold text-white mb-3">100% Handarbeit</h3>
-          <p class="text-white/80 leading-relaxed">Kein Fließband, keine Massenware. Jedes Stück wird mit der Hand gefertigt und mit Liebe zum Detail vollendet.</p>
-        </div>
-
-        <div class="text-center" data-aos="fade-up" data-aos-delay="150">
-          <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl">🏔️</div>
-          <h3 class="font-display text-xl font-bold text-white mb-3">Aus dem Herzen Bayerns</h3>
-          <p class="text-white/80 leading-relaxed">Regional verwurzelt, mit bayerischer Seele. Unsere Produkte tragen die Wärme und den Charakter unserer Heimat in sich.</p>
-        </div>
-
-        <div class="text-center" data-aos="fade-up" data-aos-delay="300">
-          <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl">🎁</div>
-          <h3 class="font-display text-xl font-bold text-white mb-3">Jedes Stück ein Unikat</h3>
-          <p class="text-white/80 leading-relaxed">Keine zwei Produkte sind gleich. Du bekommst etwas wirklich Einzigartiges — perfekt auch als persönliches Geschenk.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ===== KONTAKT ===== -->
-  <section id="kontakt" class="py-24 px-6 bg-white">
-    <div class="max-w-5xl mx-auto">
-      <div class="text-center mb-16">
-        <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-3" data-aos="fade-down">Meld dich bei uns</p>
-        <h2 class="font-display text-4xl md:text-5xl font-bold text-dark" data-aos="fade-up">Kontakt</h2>
-        <p class="text-brown mt-4 max-w-xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-          Fragen, Bestellungen oder einfach eine nette Nachricht — wir freuen uns von dir zu hören.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-
-        <!-- Formular -->
-        <div data-aos="fade-right">
-          <form class="space-y-5" onsubmit="handleSubmit(event)">
-            <div>
-              <label class="block text-sm font-semibold text-dark mb-1.5">Dein Name</label>
-              <input type="text" placeholder="Max Mustermann" required
-                class="w-full border border-brownLight rounded-xl px-4 py-3 text-dark bg-cream focus:outline-none focus:border-rose transition-colors">
-            </div>
-            <div>
-              <label class="block text-sm font-semibold text-dark mb-1.5">E-Mail</label>
-              <input type="email" placeholder="deine@email.de" required
-                class="w-full border border-brownLight rounded-xl px-4 py-3 text-dark bg-cream focus:outline-none focus:border-rose transition-colors">
-            </div>
-            <div>
-              <label class="block text-sm font-semibold text-dark mb-1.5">Nachricht</label>
-              <textarea rows="5" placeholder="Deine Nachricht an uns..." required
-                class="w-full border border-brownLight rounded-xl px-4 py-3 text-dark bg-cream focus:outline-none focus:border-rose transition-colors resize-none"></textarea>
-            </div>
-            <button type="submit" class="btn-primary w-full text-center">
-              Nachricht senden ✉️
+      <!-- Vorschau der hochgeladenen Bilder -->
+      <div id="preview-area" class="hidden mt-6" data-aos="fade-up">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-display text-lg font-semibold text-dark">
+            <span id="photo-count">0</span> Fotos ausgewaehlt
+          </h3>
+          <div class="flex gap-3">
+            <button onclick="clearPhotos()" class="text-sm text-brown hover:text-rose transition-colors font-medium">
+              Alle entfernen
             </button>
-            <p class="text-xs text-brown/60 text-center">* Das Formular benötigt noch ein Backend zum Versenden.</p>
-          </form>
-        </div>
-
-        <!-- Kontaktinfo -->
-        <div class="space-y-8" data-aos="fade-left">
-          <div class="bg-cream rounded-2xl p-6">
-            <div class="flex items-start gap-4">
-              <div class="text-2xl">📍</div>
-              <div>
-                <h4 class="font-semibold text-dark mb-1">Standort</h4>
-                <p class="text-brown">Herz Bayerns, Deutschland</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-cream rounded-2xl p-6">
-            <div class="flex items-start gap-4">
-              <div class="text-2xl">📸</div>
-              <div>
-                <h4 class="font-semibold text-dark mb-1">Social Media</h4>
-                <p class="text-brown">Folge uns auf Instagram für aktuelle Produkte und neue Kreationen!</p>
-                <a href="#" class="text-rose font-semibold hover:text-roseDark transition-colors mt-1 inline-block">@vo.herzn →</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-cream rounded-2xl p-6">
-            <div class="flex items-start gap-4">
-              <div class="text-2xl">⏰</div>
-              <div>
-                <h4 class="font-semibold text-dark mb-1">Antwortzeit</h4>
-                <p class="text-brown">Wir melden uns in der Regel innerhalb von 24–48 Stunden bei dir.</p>
-              </div>
-            </div>
+            <button id="generate-btn" onclick="generateListings()" class="btn-primary text-sm !py-2.5 !px-6">
+              Listings generieren
+            </button>
           </div>
         </div>
-
+        <div id="preview-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3"></div>
       </div>
+
+      <!-- Progress -->
+      <div id="progress-area" class="hidden mt-8">
+        <div class="bg-white rounded-2xl p-8 text-center border border-brownLight/30">
+          <div class="spinner mx-auto mb-4"></div>
+          <p class="font-display text-lg font-semibold text-dark mb-2" id="progress-title">Listings werden erstellt...</p>
+          <p class="text-brown text-sm" id="progress-detail">Foto 1 von 3 wird analysiert</p>
+          <div class="w-full bg-brownLight/30 rounded-full h-2 mt-4 max-w-md mx-auto">
+            <div id="progress-bar" class="bg-rose h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ergebnisse -->
+      <div id="results-area" class="hidden mt-10">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-display text-2xl font-bold text-dark">Deine Etsy Listings</h2>
+          <button id="download-btn" onclick="downloadCSV()" class="flex items-center gap-2 btn-primary text-sm !py-2.5 !px-5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            CSV herunterladen
+          </button>
+        </div>
+        <div id="results-list" class="space-y-6"></div>
+      </div>
+
     </div>
   </section>
 
 
-  <!-- ===== FOOTER ===== -->
-  <footer class="bg-dark text-white py-12 px-6">
-    <div class="max-w-6xl mx-auto">
-      <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-        <div>
-          <p class="font-display text-2xl font-bold text-rose">vo herzn</p>
-          <p class="text-white/50 text-sm mt-1">Handgemacht aus Bayern ♥</p>
-        </div>
-        <nav class="flex gap-6 flex-wrap justify-center">
-          <a href="#produkte" class="text-white/60 hover:text-white transition-colors text-sm">Produkte</a>
-          <a href="#ueber-uns" class="text-white/60 hover:text-white transition-colors text-sm">Über uns</a>
-          <a href="#vorteile" class="text-white/60 hover:text-white transition-colors text-sm">Besonderheiten</a>
-          <a href="#kontakt" class="text-white/60 hover:text-white transition-colors text-sm">Kontakt</a>
-          <a href="#" class="text-white/60 hover:text-white transition-colors text-sm">Impressum</a>
-        </nav>
+  <!-- UEBER UNS (kurz) -->
+  <section id="ueber-uns" class="py-20 px-6 bg-white">
+    <div class="max-w-4xl mx-auto text-center">
+      <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-3" data-aos="fade-down">Ueber uns</p>
+      <h2 class="font-display text-3xl md:text-4xl font-bold text-dark mb-6" data-aos="fade-up">Vo herzn &mdash; von Herzen.</h2>
+      <p class="text-brown leading-relaxed max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+        Ein kleines Gewerbe aus dem Herzen Bayerns. Wir fertigen handgemachte Deko, Accessoires und Unikate &mdash;
+        jedes Stueck mit Liebe, Geduld und einem Gespuer fuer das Besondere.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- KONTAKT (kurz) -->
+  <section id="kontakt" class="py-20 px-6 bg-cream">
+    <div class="max-w-2xl mx-auto text-center">
+      <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-3" data-aos="fade-down">Kontakt</p>
+      <h2 class="font-display text-3xl font-bold text-dark mb-4" data-aos="fade-up">Fragen oder Feedback?</h2>
+      <p class="text-brown mb-6" data-aos="fade-up" data-aos-delay="100">
+        Schreib uns &mdash; wir freuen uns ueber jede Nachricht.
+      </p>
+      <a href="mailto:justinsinger777@gmail.com" class="btn-primary" data-aos="fade-up" data-aos-delay="200">E-Mail schreiben</a>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="bg-dark text-white py-10 px-6">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <div>
+        <p class="font-display text-xl font-bold text-rose">vo herzn</p>
+        <p class="text-white/50 text-sm mt-1">Handgemacht aus Bayern</p>
       </div>
-      <div class="border-t border-white/10 mt-8 pt-8 text-center">
-        <p class="text-white/40 text-sm">© 2025 vo herzn. Alle Rechte vorbehalten.</p>
-      </div>
+      <p class="text-white/40 text-sm">&copy; 2025 vo herzn. Alle Rechte vorbehalten.</p>
     </div>
   </footer>
 
 
-  <!-- ===== JAVASCRIPT ===== -->
+  <!-- JAVASCRIPT -->
   <script>
-    // AOS initialisieren
     AOS.init({ duration: 700, once: true, offset: 80 });
 
-    // Hamburger Menü
+    // --- State ---
+    let selectedFiles = [];
+    let generatedResults = [];
+
+    // --- Mobile Menu ---
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobile-menu');
-    const bar1 = document.getElementById('bar1');
-    const bar2 = document.getElementById('bar2');
-    const bar3 = document.getElementById('bar3');
-
     hamburger.addEventListener('click', () => {
       mobileMenu.classList.toggle('open');
-      // X-Animation
-      if (mobileMenu.classList.contains('open')) {
-        bar1.style.transform = 'translateY(8px) rotate(45deg)';
-        bar2.style.opacity = '0';
-        bar3.style.transform = 'translateY(-8px) rotate(-45deg)';
-      } else {
-        bar1.style.transform = '';
-        bar2.style.opacity = '';
-        bar3.style.transform = '';
-      }
+      const open = mobileMenu.classList.contains('open');
+      document.getElementById('bar1').style.transform = open ? 'translateY(8px) rotate(45deg)' : '';
+      document.getElementById('bar2').style.opacity = open ? '0' : '';
+      document.getElementById('bar3').style.transform = open ? 'translateY(-8px) rotate(-45deg)' : '';
     });
-
     function closeMobileMenu() {
       mobileMenu.classList.remove('open');
-      bar1.style.transform = '';
-      bar2.style.opacity = '';
-      bar3.style.transform = '';
+      document.getElementById('bar1').style.transform = '';
+      document.getElementById('bar2').style.opacity = '';
+      document.getElementById('bar3').style.transform = '';
     }
 
-    // Formular
-    function handleSubmit(e) {
-      e.preventDefault();
-      alert('Danke für deine Nachricht! ♥\n\nHinweis: Das Formular benötigt noch ein Backend, um Nachrichten wirklich zu versenden.');
-    }
-
-    // Header beim Scrollen
+    // --- Header Shadow ---
     const header = document.querySelector('header');
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        header.style.boxShadow = '0 4px 20px rgba(44,31,26,0.08)';
-      } else {
-        header.style.boxShadow = 'none';
-      }
+      header.style.boxShadow = window.scrollY > 50 ? '0 4px 20px rgba(44,31,26,0.08)' : 'none';
     });
+
+    // --- Saison laden ---
+    async function loadSeason() {
+      try {
+        const res = await fetch('/api/season');
+        const data = await res.json();
+        const icons = { Fruehling: '🌸', Sommer: '☀️', Herbst: '🍂', Winter: '❄️' };
+        document.getElementById('season-icon').textContent = icons[data.season] || '🌿';
+        let text = `Saison: ${data.season}`;
+        if (data.events.length > 0) {
+          text += ` — ${data.events.join(', ')} aktiv`;
+        }
+        text += ` | Stimmung: ${data.mood}`;
+        document.getElementById('season-text').textContent = text;
+      } catch (e) {
+        document.getElementById('season-text').textContent = 'Saisonale Anpassung aktiv';
+      }
+    }
+    loadSeason();
+
+    // --- Drag & Drop ---
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+
+    ['dragenter', 'dragover'].forEach(evt => {
+      dropZone.addEventListener(evt, e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    });
+    ['dragleave', 'drop'].forEach(evt => {
+      dropZone.addEventListener(evt, e => { e.preventDefault(); dropZone.classList.remove('dragover'); });
+    });
+
+    dropZone.addEventListener('drop', e => {
+      const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+      addFiles(files);
+    });
+
+    dropZone.addEventListener('click', e => {
+      if (e.target.tagName !== 'BUTTON') fileInput.click();
+    });
+
+    fileInput.addEventListener('change', () => {
+      addFiles(Array.from(fileInput.files));
+      fileInput.value = '';
+    });
+
+    function addFiles(files) {
+      const remaining = 10 - selectedFiles.length;
+      const toAdd = files.slice(0, remaining);
+      selectedFiles.push(...toAdd);
+      if (selectedFiles.length > 10) selectedFiles = selectedFiles.slice(0, 10);
+      updatePreview();
+    }
+
+    function removeFile(index) {
+      selectedFiles.splice(index, 1);
+      updatePreview();
+    }
+
+    function clearPhotos() {
+      selectedFiles = [];
+      updatePreview();
+    }
+
+    function updatePreview() {
+      const area = document.getElementById('preview-area');
+      const grid = document.getElementById('preview-grid');
+      const count = document.getElementById('photo-count');
+
+      if (selectedFiles.length === 0) {
+        area.classList.add('hidden');
+        return;
+      }
+
+      area.classList.remove('hidden');
+      count.textContent = selectedFiles.length;
+      grid.innerHTML = '';
+
+      selectedFiles.forEach((file, i) => {
+        const div = document.createElement('div');
+        div.className = 'relative group';
+        const img = document.createElement('img');
+        img.className = 'w-full aspect-square object-cover rounded-xl border border-brownLight/30';
+        img.src = URL.createObjectURL(file);
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'absolute -top-2 -right-2 w-6 h-6 bg-roseDark text-white rounded-full text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center';
+        removeBtn.textContent = '✕';
+        removeBtn.onclick = (e) => { e.stopPropagation(); removeFile(i); };
+        const name = document.createElement('p');
+        name.className = 'text-xs text-brown mt-1 truncate';
+        name.textContent = file.name;
+        div.append(img, removeBtn, name);
+        grid.appendChild(div);
+      });
+    }
+
+    // --- Generate Listings ---
+    async function generateListings() {
+      if (selectedFiles.length === 0) return;
+
+      const generateBtn = document.getElementById('generate-btn');
+      const progressArea = document.getElementById('progress-area');
+      const resultsArea = document.getElementById('results-area');
+
+      generateBtn.disabled = true;
+      generateBtn.textContent = 'Wird generiert...';
+      generateBtn.style.opacity = '0.6';
+      progressArea.classList.remove('hidden');
+      resultsArea.classList.add('hidden');
+      generatedResults = [];
+
+      document.getElementById('progress-title').textContent = 'Listings werden erstellt...';
+      document.getElementById('progress-detail').textContent = `${selectedFiles.length} Fotos werden analysiert — das dauert ca. ${selectedFiles.length * 15}-${selectedFiles.length * 25} Sekunden`;
+      document.getElementById('progress-bar').style.width = '10%';
+
+      try {
+        // Bilder zu Base64 konvertieren
+        const images = [];
+        for (const file of selectedFiles) {
+          const data = await fileToBase64(file);
+          images.push({ data, name: file.name, type: file.type });
+        }
+
+        document.getElementById('progress-bar').style.width = '30%';
+        document.getElementById('progress-detail').textContent = 'Fotos werden von der KI analysiert...';
+
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ images }),
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.error || 'Server-Fehler');
+        }
+
+        document.getElementById('progress-bar').style.width = '90%';
+
+        const data = await res.json();
+        generatedResults = data.results;
+
+        document.getElementById('progress-bar').style.width = '100%';
+        document.getElementById('progress-detail').textContent = 'Fertig!';
+
+        setTimeout(() => {
+          progressArea.classList.add('hidden');
+          displayResults();
+        }, 500);
+
+      } catch (err) {
+        progressArea.classList.add('hidden');
+        alert('Fehler: ' + err.message);
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = 'Listings generieren';
+        generateBtn.style.opacity = '1';
+      }
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // --- Display Results ---
+    function displayResults() {
+      const area = document.getElementById('results-area');
+      const list = document.getElementById('results-list');
+      area.classList.remove('hidden');
+      list.innerHTML = '';
+
+      generatedResults.forEach((result, i) => {
+        const card = document.createElement('div');
+        card.className = 'listing-card bg-white rounded-2xl border border-brownLight/30 overflow-hidden animate-in';
+        card.style.animationDelay = `${i * 100}ms`;
+
+        if (result.error) {
+          card.innerHTML = `
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-red-500 text-lg">&#9888;</span>
+                <h3 class="font-display text-lg font-semibold text-dark">${escapeHtml(result.filename)}</h3>
+              </div>
+              <p class="text-red-500 text-sm">${escapeHtml(result.error)}</p>
+            </div>`;
+          list.appendChild(card);
+          return;
+        }
+
+        const listing = result.listing;
+        const product = result.product;
+        const tagsHtml = listing.tags.map(tag =>
+          `<span class="tag-pill" onclick="copyText('${escapeHtml(tag)}')" title="Klick zum Kopieren">${escapeHtml(tag)}</span>`
+        ).join(' ');
+
+        card.innerHTML = `
+          <div class="bg-gradient-to-r from-rose/5 to-transparent px-6 py-4 border-b border-brownLight/20">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-xs font-semibold text-rose uppercase tracking-wider">Listing ${i + 1}</span>
+                <h3 class="font-display text-lg font-bold text-dark mt-0.5">${escapeHtml(product.product_name)}</h3>
+                <p class="text-xs text-brown">${escapeHtml(product.category)} &middot; ${escapeHtml(product.materials.join(', '))}</p>
+              </div>
+              <button onclick="copyListing(${i})" class="text-sm text-rose hover:text-roseDark font-semibold transition-colors flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                Alles kopieren
+              </button>
+            </div>
+          </div>
+          <div class="p-6 space-y-5">
+            <!-- Titel -->
+            <div class="copy-group">
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs font-semibold text-rose uppercase tracking-wider">Titel</label>
+                <button onclick="copyText(generatedResults[${i}].listing.title)" class="copy-btn text-xs text-brown hover:text-rose">Kopieren</button>
+              </div>
+              <p class="text-dark font-semibold leading-relaxed bg-cream rounded-xl px-4 py-3 border border-brownLight/20">${escapeHtml(listing.title)}</p>
+            </div>
+            <!-- Beschreibung -->
+            <div class="copy-group">
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs font-semibold text-rose uppercase tracking-wider">Beschreibung</label>
+                <button onclick="copyText(generatedResults[${i}].listing.description)" class="copy-btn text-xs text-brown hover:text-rose">Kopieren</button>
+              </div>
+              <div class="text-brown leading-relaxed bg-cream rounded-xl px-4 py-3 border border-brownLight/20 text-sm whitespace-pre-line">${escapeHtml(listing.description)}</div>
+            </div>
+            <!-- Tags -->
+            <div class="copy-group">
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs font-semibold text-rose uppercase tracking-wider">13 Tags</label>
+                <button onclick="copyText(generatedResults[${i}].listing.tags.join(', '))" class="copy-btn text-xs text-brown hover:text-rose">Alle kopieren</button>
+              </div>
+              <div class="flex flex-wrap gap-2">${tagsHtml}</div>
+            </div>
+          </div>`;
+
+        list.appendChild(card);
+      });
+
+      area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // --- Copy ---
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('Kopiert!');
+      } catch (e) {
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta);
+        ta.select(); document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('Kopiert!');
+      }
+    }
+
+    function copyListing(index) {
+      const r = generatedResults[index];
+      if (!r || r.error) return;
+      const text = `TITEL:\n${r.listing.title}\n\nBESCHREIBUNG:\n${r.listing.description}\n\nTAGS:\n${r.listing.tags.join(', ')}`;
+      copyText(text);
+    }
+
+    function showToast(msg) {
+      const existing = document.getElementById('toast');
+      if (existing) existing.remove();
+      const toast = document.createElement('div');
+      toast.id = 'toast';
+      toast.className = 'fixed bottom-6 right-6 bg-dark text-white px-5 py-3 rounded-xl shadow-lg text-sm font-medium z-50';
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2000);
+    }
+
+    // --- CSV Download ---
+    function downloadCSV() {
+      if (generatedResults.length === 0) return;
+
+      const rows = [['Produktname', 'Titel', 'Beschreibung', 'Tag 1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8', 'Tag 9', 'Tag 10', 'Tag 11', 'Tag 12', 'Tag 13']];
+
+      generatedResults.forEach(r => {
+        if (r.error) return;
+        const tags = r.listing.tags.slice(0, 13);
+        while (tags.length < 13) tags.push('');
+        rows.push([
+          r.product.product_name,
+          r.listing.title,
+          r.listing.description,
+          ...tags,
+        ]);
+      });
+
+      const csvContent = rows.map(row =>
+        row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+      ).join('\n');
+
+      const BOM = '\uFEFF';
+      const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const today = new Date().toISOString().split('T')[0];
+      a.download = `vo-herzn-listings-${today}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('CSV heruntergeladen!');
+    }
+
+    // --- Helpers ---
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
   </script>
 
 </body>

@@ -21,7 +21,10 @@
       "Bash(python3 -c \"\nfrom instagram_post import create_post\npath = create_post\\('Neu eingetroffen ✨ Handgefertigte Holzschilder jetzt im Shop.'\\)\nprint\\('Gespeichert:', path\\)\n\" 2>&1 | grep -v Warning | grep -v warn)",
       "Bash(git add:*)",
       "Bash(git commit -m ':*)",
-      "Bash(python3 -m pytest tests/test_instagram.py -v)"
+      "Bash(python3 -m pytest tests/test_instagram.py -v)",
+      "Bash(python3:*)",
+      "Bash(pkill -f \"python3 app.py\")",
+      "Bash(pkill -f \"python3.*app.py\")"
     ]
   }
 }

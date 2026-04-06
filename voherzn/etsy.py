@@ -1,13 +1,15 @@
 """Etsy Listing Generator — erzeugt Titel, Beschreibung und Tags via Claude API."""
 
 import os
+from pathlib import Path
 
 import anthropic
 from dotenv import load_dotenv
 
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+
 
 def _get_client() -> anthropic.Anthropic:
-    load_dotenv()
     api_key = os.getenv("ANTHROPIC_API_KEY")
     if not api_key:
         raise ValueError("ANTHROPIC_API_KEY nicht in .env gefunden")

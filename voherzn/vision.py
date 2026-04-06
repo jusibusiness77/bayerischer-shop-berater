@@ -2,11 +2,12 @@ import base64
 import json
 import os
 import re
+from pathlib import Path
 
 import anthropic
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 VISION_PROMPT = """Analysiere dieses Produktfoto und gib die Informationen als JSON zurueck.
 Antworte NUR mit dem JSON, ohne weitere Erklaerung.
