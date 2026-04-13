@@ -87,6 +87,29 @@
       to { opacity: 1; transform: translateY(0); }
     }
     .animate-in { animation: fadeInUp 0.5s ease forwards; }
+
+    .option-btn {
+      padding: 0.5rem 1.25rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500;
+      border: 2px solid #d4b8a8; color: #7c5c4a; background: white;
+      transition: all 0.2s ease; cursor: pointer;
+    }
+    .option-btn:hover { border-color: #c9837a; color: #c9837a; }
+    .option-btn.active { background-color: #c9837a; color: white; border-color: #c9837a; }
+
+    .copy-single-btn {
+      display: inline-flex; align-items: center; gap: 0.25rem;
+      padding: 0.375rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 600;
+      background-color: rgba(201,131,122,0.12); color: #a8635b;
+      transition: all 0.2s ease; cursor: pointer; border: none;
+    }
+    .copy-single-btn:hover { background-color: rgba(201,131,122,0.25); }
+    .copy-single-btn.copied { background-color: #a8635b; color: white; }
+
+    .history-item {
+      background: white; border: 1px solid rgba(212,184,168,0.3); border-radius: 1rem;
+      padding: 1rem 1.25rem; transition: all 0.2s ease; cursor: pointer;
+    }
+    .history-item:hover { box-shadow: 0 4px 15px rgba(124, 92, 74, 0.1); }
   </style>
 </head>
 
@@ -98,6 +121,7 @@
       <a href="#" class="font-display text-2xl font-bold text-rose tracking-wide">vo herzn</a>
       <ul class="hidden md:flex gap-8 items-center">
         <li><a href="#generator" class="nav-link">Listing Generator</a></li>
+        <li><a href="#verlauf" class="nav-link">Verlauf</a></li>
         <li><a href="#ueber-uns" class="nav-link">Ueber uns</a></li>
         <li><a href="#kontakt" class="nav-link">Kontakt</a></li>
       </ul>
@@ -110,6 +134,7 @@
     <div id="mobile-menu" class="md:hidden bg-cream border-t border-brownLight/30">
       <ul class="flex flex-col px-6 py-4 gap-4">
         <li><a href="#generator" class="nav-link block py-1" onclick="closeMobileMenu()">Listing Generator</a></li>
+        <li><a href="#verlauf" class="nav-link block py-1" onclick="closeMobileMenu()">Verlauf</a></li>
         <li><a href="#ueber-uns" class="nav-link block py-1" onclick="closeMobileMenu()">Ueber uns</a></li>
         <li><a href="#kontakt" class="nav-link block py-1" onclick="closeMobileMenu()">Kontakt</a></li>
       </ul>
@@ -140,6 +165,43 @@
   <!-- GENERATOR -->
   <section id="generator" class="py-12 px-6">
     <div class="max-w-4xl mx-auto">
+
+      <!-- Einstellungen: Sprache, Stil, Preis -->
+      <div class="bg-white rounded-2xl border border-brownLight/30 p-6 mb-6" data-aos="fade-up">
+        <h3 class="font-display text-lg font-semibold text-dark mb-5">Einstellungen</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <!-- Sprache -->
+          <div>
+            <label class="text-xs font-semibold text-rose uppercase tracking-wider block mb-2">Sprache</label>
+            <div class="flex gap-2">
+              <button class="option-btn active" data-group="lang" data-value="de" onclick="selectOption(this)">Deutsch</button>
+              <button class="option-btn" data-group="lang" data-value="en" onclick="selectOption(this)">Englisch</button>
+            </div>
+          </div>
+
+          <!-- Stil -->
+          <div>
+            <label class="text-xs font-semibold text-rose uppercase tracking-wider block mb-2">Stil</label>
+            <div class="flex flex-wrap gap-2">
+              <button class="option-btn active" data-group="style" data-value="rustikal" onclick="selectOption(this)">Rustikal</button>
+              <button class="option-btn" data-group="style" data-value="modern" onclick="selectOption(this)">Modern</button>
+              <button class="option-btn" data-group="style" data-value="verspielt" onclick="selectOption(this)">Verspielt</button>
+            </div>
+          </div>
+
+          <!-- Preis -->
+          <div>
+            <label class="text-xs font-semibold text-rose uppercase tracking-wider block mb-2" for="price-input">Preis</label>
+            <div class="relative">
+              <input type="number" id="price-input" min="0" step="0.01" placeholder="z.B. 24.90"
+                class="w-full border-2 border-brownLight/50 rounded-xl px-4 py-2.5 text-dark font-medium bg-cream/50 focus:border-rose focus:outline-none transition-colors"
+              >
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-brown font-medium">&euro;</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Drop Zone -->
       <div id="drop-zone" class="drop-zone bg-white p-12 text-center" data-aos="fade-up">
@@ -200,8 +262,30 @@
   </section>
 
 
+  <!-- LISTING-VERLAUF -->
+  <section id="verlauf" class="py-20 px-6 bg-white">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-10">
+        <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-3" data-aos="fade-down">Verlauf</p>
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-dark mb-2" data-aos="fade-up">Deine letzten Listings</h2>
+        <p class="text-brown" data-aos="fade-up" data-aos-delay="100">Gespeichert in deinem Browser &mdash; immer griffbereit.</p>
+      </div>
+      <div id="history-empty" class="text-center py-12 text-brown" data-aos="fade-up">
+        <div class="text-4xl mb-3">&#128203;</div>
+        <p>Noch keine Listings erstellt. Generiere dein erstes Listing oben!</p>
+      </div>
+      <div id="history-list" class="space-y-4 hidden" data-aos="fade-up"></div>
+      <div id="history-actions" class="hidden mt-6 text-center" data-aos="fade-up">
+        <button onclick="clearHistory()" class="text-sm text-brown hover:text-rose transition-colors font-medium">
+          Verlauf loeschen
+        </button>
+      </div>
+    </div>
+  </section>
+
+
   <!-- UEBER UNS (kurz) -->
-  <section id="ueber-uns" class="py-20 px-6 bg-white">
+  <section id="ueber-uns" class="py-20 px-6 bg-cream">
     <div class="max-w-4xl mx-auto text-center">
       <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-3" data-aos="fade-down">Ueber uns</p>
       <h2 class="font-display text-3xl md:text-4xl font-bold text-dark mb-6" data-aos="fade-up">Vo herzn &mdash; von Herzen.</h2>
@@ -214,7 +298,7 @@
 
 
   <!-- KONTAKT (kurz) -->
-  <section id="kontakt" class="py-20 px-6 bg-cream">
+  <section id="kontakt" class="py-20 px-6 bg-white">
     <div class="max-w-2xl mx-auto text-center">
       <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-3" data-aos="fade-down">Kontakt</p>
       <h2 class="font-display text-3xl font-bold text-dark mb-4" data-aos="fade-up">Fragen oder Feedback?</h2>
@@ -245,6 +329,7 @@
     // --- State ---
     let selectedFiles = [];
     let generatedResults = [];
+    let settings = { lang: 'de', style: 'rustikal', price: '' };
 
     // --- Mobile Menu ---
     const hamburger = document.getElementById('hamburger');
@@ -269,16 +354,24 @@
       header.style.boxShadow = window.scrollY > 50 ? '0 4px 20px rgba(44,31,26,0.08)' : 'none';
     });
 
+    // --- Option Buttons (Sprache / Stil) ---
+    function selectOption(btn) {
+      const group = btn.dataset.group;
+      document.querySelectorAll(`[data-group="${group}"]`).forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      settings[group === 'lang' ? 'lang' : 'style'] = btn.dataset.value;
+    }
+
     // --- Saison laden ---
     async function loadSeason() {
       try {
         const res = await fetch('/api/season');
         const data = await res.json();
-        const icons = { Fruehling: '🌸', Sommer: '☀️', Herbst: '🍂', Winter: '❄️' };
-        document.getElementById('season-icon').textContent = icons[data.season] || '🌿';
+        const icons = { Fruehling: '\u{1F338}', Sommer: '\u{2600}\u{FE0F}', Herbst: '\u{1F342}', Winter: '\u{2744}\u{FE0F}' };
+        document.getElementById('season-icon').textContent = icons[data.season] || '\u{1F33F}';
         let text = `Saison: ${data.season}`;
         if (data.events.length > 0) {
-          text += ` — ${data.events.join(', ')} aktiv`;
+          text += ` \u2014 ${data.events.join(', ')} aktiv`;
         }
         text += ` | Stimmung: ${data.mood}`;
         document.getElementById('season-text').textContent = text;
@@ -353,7 +446,7 @@
         img.src = URL.createObjectURL(file);
         const removeBtn = document.createElement('button');
         removeBtn.className = 'absolute -top-2 -right-2 w-6 h-6 bg-roseDark text-white rounded-full text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center';
-        removeBtn.textContent = '✕';
+        removeBtn.textContent = '\u2715';
         removeBtn.onclick = (e) => { e.stopPropagation(); removeFile(i); };
         const name = document.createElement('p');
         name.className = 'text-xs text-brown mt-1 truncate';
@@ -367,6 +460,8 @@
     async function generateListings() {
       if (selectedFiles.length === 0) return;
 
+      settings.price = document.getElementById('price-input').value;
+
       const generateBtn = document.getElementById('generate-btn');
       const progressArea = document.getElementById('progress-area');
       const resultsArea = document.getElementById('results-area');
@@ -379,11 +474,10 @@
       generatedResults = [];
 
       document.getElementById('progress-title').textContent = 'Listings werden erstellt...';
-      document.getElementById('progress-detail').textContent = `${selectedFiles.length} Fotos werden analysiert — das dauert ca. ${selectedFiles.length * 15}-${selectedFiles.length * 25} Sekunden`;
+      document.getElementById('progress-detail').textContent = `${selectedFiles.length} Fotos werden analysiert \u2014 das dauert ca. ${selectedFiles.length * 15}-${selectedFiles.length * 25} Sekunden`;
       document.getElementById('progress-bar').style.width = '10%';
 
       try {
-        // Bilder zu Base64 konvertieren
         const images = [];
         for (const file of selectedFiles) {
           const data = await fileToBase64(file);
@@ -396,7 +490,12 @@
         const res = await fetch('/api/generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ images }),
+          body: JSON.stringify({
+            images,
+            language: settings.lang,
+            style: settings.style,
+            price: settings.price,
+          }),
         });
 
         if (!res.ok) {
@@ -411,6 +510,9 @@
 
         document.getElementById('progress-bar').style.width = '100%';
         document.getElementById('progress-detail').textContent = 'Fertig!';
+
+        // Im Verlauf speichern
+        saveToHistory(generatedResults);
 
         setTimeout(() => {
           progressArea.classList.add('hidden');
@@ -467,12 +569,14 @@
           `<span class="tag-pill" onclick="copyText('${escapeHtml(tag)}')" title="Klick zum Kopieren">${escapeHtml(tag)}</span>`
         ).join(' ');
 
+        const priceDisplay = settings.price ? `<span class="ml-2 text-rose font-bold">${escapeHtml(settings.price)} \u20AC</span>` : '';
+
         card.innerHTML = `
           <div class="bg-gradient-to-r from-rose/5 to-transparent px-6 py-4 border-b border-brownLight/20">
             <div class="flex items-center justify-between">
               <div>
                 <span class="text-xs font-semibold text-rose uppercase tracking-wider">Listing ${i + 1}</span>
-                <h3 class="font-display text-lg font-bold text-dark mt-0.5">${escapeHtml(product.product_name)}</h3>
+                <h3 class="font-display text-lg font-bold text-dark mt-0.5">${escapeHtml(product.product_name)}${priceDisplay}</h3>
                 <p class="text-xs text-brown">${escapeHtml(product.category)} &middot; ${escapeHtml(product.materials.join(', '))}</p>
               </div>
               <button onclick="copyListing(${i})" class="text-sm text-rose hover:text-roseDark font-semibold transition-colors flex items-center gap-1">
@@ -488,7 +592,10 @@
             <div class="copy-group">
               <div class="flex items-center justify-between mb-1.5">
                 <label class="text-xs font-semibold text-rose uppercase tracking-wider">Titel</label>
-                <button onclick="copyText(generatedResults[${i}].listing.title)" class="copy-btn text-xs text-brown hover:text-rose">Kopieren</button>
+                <button onclick="copySingle(this, generatedResults[${i}].listing.title)" class="copy-single-btn">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  Titel kopieren
+                </button>
               </div>
               <p class="text-dark font-semibold leading-relaxed bg-cream rounded-xl px-4 py-3 border border-brownLight/20">${escapeHtml(listing.title)}</p>
             </div>
@@ -496,7 +603,10 @@
             <div class="copy-group">
               <div class="flex items-center justify-between mb-1.5">
                 <label class="text-xs font-semibold text-rose uppercase tracking-wider">Beschreibung</label>
-                <button onclick="copyText(generatedResults[${i}].listing.description)" class="copy-btn text-xs text-brown hover:text-rose">Kopieren</button>
+                <button onclick="copySingle(this, generatedResults[${i}].listing.description)" class="copy-single-btn">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  Beschreibung kopieren
+                </button>
               </div>
               <div class="text-brown leading-relaxed bg-cream rounded-xl px-4 py-3 border border-brownLight/20 text-sm whitespace-pre-line">${escapeHtml(listing.description)}</div>
             </div>
@@ -504,7 +614,10 @@
             <div class="copy-group">
               <div class="flex items-center justify-between mb-1.5">
                 <label class="text-xs font-semibold text-rose uppercase tracking-wider">13 Tags</label>
-                <button onclick="copyText(generatedResults[${i}].listing.tags.join(', '))" class="copy-btn text-xs text-brown hover:text-rose">Alle kopieren</button>
+                <button onclick="copySingle(this, generatedResults[${i}].listing.tags.join(', '))" class="copy-single-btn">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  Tags kopieren
+                </button>
               </div>
               <div class="flex flex-wrap gap-2">${tagsHtml}</div>
             </div>
@@ -516,19 +629,32 @@
       area.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // --- Copy ---
+    // --- Copy Functions ---
     async function copyText(text) {
       try {
         await navigator.clipboard.writeText(text);
         showToast('Kopiert!');
       } catch (e) {
-        // Fallback
         const ta = document.createElement('textarea');
         ta.value = text; document.body.appendChild(ta);
         ta.select(); document.execCommand('copy');
         document.body.removeChild(ta);
         showToast('Kopiert!');
       }
+    }
+
+    async function copySingle(btn, text) {
+      await copyText(text);
+      const originalText = btn.innerHTML;
+      btn.classList.add('copied');
+      const label = btn.querySelector('svg').nextSibling;
+      const textNode = btn.childNodes[btn.childNodes.length - 1];
+      textNode.textContent = ' Kopiert!';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        textNode.textContent = originalText.includes('Titel') ? ' Titel kopieren' :
+                               originalText.includes('Beschreibung') ? ' Beschreibung kopieren' : ' Tags kopieren';
+      }, 1500);
     }
 
     function copyListing(index) {
@@ -553,7 +679,7 @@
     function downloadCSV() {
       if (generatedResults.length === 0) return;
 
-      const rows = [['Produktname', 'Titel', 'Beschreibung', 'Tag 1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8', 'Tag 9', 'Tag 10', 'Tag 11', 'Tag 12', 'Tag 13']];
+      const rows = [['Produktname', 'Preis', 'Titel', 'Beschreibung', 'Tag 1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8', 'Tag 9', 'Tag 10', 'Tag 11', 'Tag 12', 'Tag 13']];
 
       generatedResults.forEach(r => {
         if (r.error) return;
@@ -561,6 +687,7 @@
         while (tags.length < 13) tags.push('');
         rows.push([
           r.product.product_name,
+          settings.price || '',
           r.listing.title,
           r.listing.description,
           ...tags,
@@ -582,6 +709,128 @@
       URL.revokeObjectURL(url);
       showToast('CSV heruntergeladen!');
     }
+
+    // --- Listing-Verlauf (localStorage) ---
+    const HISTORY_KEY = 'voherzn_listing_history';
+    const MAX_HISTORY = 20;
+
+    function getHistory() {
+      try {
+        return JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+      } catch { return []; }
+    }
+
+    function saveToHistory(results) {
+      const history = getHistory();
+      const entry = {
+        id: Date.now(),
+        date: new Date().toLocaleString('de-DE'),
+        settings: { ...settings },
+        results: results.filter(r => !r.error).map(r => ({
+          product_name: r.product.product_name,
+          category: r.product.category,
+          title: r.listing.title,
+          description: r.listing.description,
+          tags: r.listing.tags,
+        })),
+      };
+      history.unshift(entry);
+      if (history.length > MAX_HISTORY) history.length = MAX_HISTORY;
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const history = getHistory();
+      const emptyEl = document.getElementById('history-empty');
+      const listEl = document.getElementById('history-list');
+      const actionsEl = document.getElementById('history-actions');
+
+      if (history.length === 0) {
+        emptyEl.classList.remove('hidden');
+        listEl.classList.add('hidden');
+        actionsEl.classList.add('hidden');
+        return;
+      }
+
+      emptyEl.classList.add('hidden');
+      listEl.classList.remove('hidden');
+      actionsEl.classList.remove('hidden');
+      listEl.innerHTML = '';
+
+      history.forEach((entry, idx) => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+
+        const productNames = entry.results.map(r => r.product_name).join(', ');
+        const langLabel = entry.settings.lang === 'de' ? 'Deutsch' : 'Englisch';
+        const priceLabel = entry.settings.price ? ` | ${entry.settings.price} \u20AC` : '';
+
+        div.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-3 mb-1">
+                <p class="font-display font-semibold text-dark truncate">${escapeHtml(productNames || 'Listing')}</p>
+                <span class="text-xs text-brown/60 whitespace-nowrap">${escapeHtml(entry.date)}</span>
+              </div>
+              <p class="text-xs text-brown">${entry.results.length} Listing(s) | ${escapeHtml(langLabel)} | ${escapeHtml(entry.settings.style)}${priceLabel}</p>
+            </div>
+            <div class="flex items-center gap-2 ml-4">
+              <button onclick="loadFromHistory(${idx})" class="copy-single-btn">Laden</button>
+              <button onclick="removeFromHistory(${idx})" class="text-xs text-brown/50 hover:text-rose transition-colors" title="Entfernen">&times;</button>
+            </div>
+          </div>`;
+
+        listEl.appendChild(div);
+      });
+    }
+
+    function loadFromHistory(idx) {
+      const history = getHistory();
+      const entry = history[idx];
+      if (!entry) return;
+
+      // Einstellungen wiederherstellen
+      document.querySelectorAll(`[data-group="lang"]`).forEach(b => {
+        b.classList.toggle('active', b.dataset.value === entry.settings.lang);
+      });
+      document.querySelectorAll(`[data-group="style"]`).forEach(b => {
+        b.classList.toggle('active', b.dataset.value === entry.settings.style);
+      });
+      settings.lang = entry.settings.lang;
+      settings.style = entry.settings.style;
+      if (entry.settings.price) {
+        document.getElementById('price-input').value = entry.settings.price;
+        settings.price = entry.settings.price;
+      }
+
+      // Ergebnisse anzeigen
+      generatedResults = entry.results.map(r => ({
+        product: { product_name: r.product_name, category: r.category, materials: [] },
+        listing: { title: r.title, description: r.description, tags: r.tags },
+      }));
+
+      displayResults();
+      document.getElementById('results-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      showToast('Listing aus Verlauf geladen!');
+    }
+
+    function removeFromHistory(idx) {
+      const history = getHistory();
+      history.splice(idx, 1);
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      renderHistory();
+      showToast('Eintrag entfernt');
+    }
+
+    function clearHistory() {
+      localStorage.removeItem(HISTORY_KEY);
+      renderHistory();
+      showToast('Verlauf geloescht');
+    }
+
+    // Verlauf beim Laden rendern
+    renderHistory();
 
     // --- Helpers ---
     function escapeHtml(str) {
