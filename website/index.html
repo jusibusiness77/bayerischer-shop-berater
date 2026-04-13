@@ -8,23 +8,27 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            cream: '#fdf6ee',
-            rose: '#c9837a',
-            roseDark: '#a8635b',
-            brown: '#7c5c4a',
-            brownLight: '#d4b8a8',
-            dark: '#2c1f1a',
+            cream: '#faf6f1',
+            warm: '#f5ede4',
+            rose: '#b5706a',
+            roseLight: '#d4a29d',
+            roseMuted: '#c9918b',
+            brown: '#6b4f43',
+            brownLight: '#a08272',
+            brownPale: '#d6c4b8',
+            dark: '#2a1f1a',
+            darkSoft: '#3d2e26',
           },
           fontFamily: {
-            display: ['"Playfair Display"', 'serif'],
-            body: ['Inter', 'sans-serif'],
+            display: ['"Cormorant Garamond"', 'serif'],
+            body: ['"DM Sans"', 'sans-serif'],
           }
         }
       }
@@ -33,107 +37,157 @@
 
   <style>
     html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', sans-serif; background-color: #fdf6ee; color: #2c1f1a; }
+    body { font-family: 'DM Sans', sans-serif; background-color: #faf6f1; color: #2a1f1a; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #faf6f1; }
+    ::-webkit-scrollbar-thumb { background: #d6c4b8; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #b5706a; }
+
+    /* Selection */
+    ::selection { background-color: rgba(181,112,106,0.2); }
 
     .btn-primary {
-      background-color: #c9837a; color: white; padding: 0.875rem 2rem;
-      border-radius: 9999px; font-weight: 600;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      display: inline-block;
+      background: linear-gradient(135deg, #b5706a 0%, #c9918b 100%);
+      color: white; padding: 0.875rem 2rem; border-radius: 0.75rem;
+      font-weight: 600; font-size: 0.9rem; letter-spacing: 0.02em;
+      transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem;
+      box-shadow: 0 2px 8px rgba(181,112,106,0.25);
     }
-    .btn-primary:hover { background-color: #a8635b; transform: scale(1.03); }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(181,112,106,0.35); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-    .nav-link { position: relative; color: #2c1f1a; font-weight: 500; transition: color 0.2s; }
-    .nav-link::after {
-      content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px;
-      background-color: #c9837a; transition: width 0.3s ease;
+    .btn-ghost {
+      color: #6b4f43; font-weight: 600; font-size: 0.85rem; padding: 0.625rem 1.25rem;
+      border-radius: 0.75rem; border: 1.5px solid #d6c4b8; background: white;
+      transition: all 0.2s ease;
     }
-    .nav-link:hover::after { width: 100%; }
-    .nav-link:hover { color: #c9837a; }
+    .btn-ghost:hover { border-color: #b5706a; color: #b5706a; background: rgba(181,112,106,0.04); }
 
-    #mobile-menu { display: none; }
-    #mobile-menu.open { display: block; }
+    .nav-link {
+      position: relative; color: #6b4f43; font-weight: 500; font-size: 0.9rem;
+      transition: color 0.2s; padding: 0.25rem 0;
+    }
+    .nav-link:hover { color: #b5706a; }
+
+    #mobile-menu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    #mobile-menu.open { max-height: 300px; }
 
     .drop-zone {
-      border: 3px dashed #d4b8a8; border-radius: 1.5rem;
-      transition: all 0.3s ease; cursor: pointer;
+      border: 2px dashed #d6c4b8; border-radius: 1.25rem;
+      transition: all 0.3s ease; cursor: pointer; background: white;
     }
-    .drop-zone.dragover { border-color: #c9837a; background-color: rgba(201,131,122,0.08); transform: scale(1.01); }
+    .drop-zone:hover { border-color: #c9918b; }
+    .drop-zone.dragover { border-color: #b5706a; background: rgba(181,112,106,0.04); transform: scale(1.005); }
 
-    .listing-card { transition: all 0.3s ease; }
-    .listing-card:hover { box-shadow: 0 10px 30px rgba(124, 92, 74, 0.12); }
-
-    .copy-btn {
-      opacity: 0; transition: opacity 0.2s;
+    .listing-card {
+      background: white; border: 1px solid rgba(214,196,184,0.4);
+      border-radius: 1.25rem; overflow: hidden;
+      transition: all 0.3s ease;
     }
-    .copy-group:hover .copy-btn { opacity: 1; }
+    .listing-card:hover { box-shadow: 0 8px 32px rgba(107,79,67,0.08); }
 
-    .tag-pill {
-      display: inline-block; background-color: rgba(201,131,122,0.15);
-      color: #a8635b; padding: 0.25rem 0.75rem; border-radius: 9999px;
-      font-size: 0.8rem; font-weight: 500; cursor: pointer;
-      transition: background-color 0.2s;
-    }
-    .tag-pill:hover { background-color: rgba(201,131,122,0.3); }
-
-    .spinner { border: 3px solid #d4b8a8; border-top: 3px solid #c9837a; border-radius: 50%;
-      width: 20px; height: 20px; animation: spin 0.8s linear infinite; display: inline-block; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .progress-ring { transition: stroke-dashoffset 0.5s ease; }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-in { animation: fadeInUp 0.5s ease forwards; }
-
-    .option-btn {
-      padding: 0.5rem 1.25rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500;
-      border: 2px solid #d4b8a8; color: #7c5c4a; background: white;
-      transition: all 0.2s ease; cursor: pointer;
-    }
-    .option-btn:hover { border-color: #c9837a; color: #c9837a; }
-    .option-btn.active { background-color: #c9837a; color: white; border-color: #c9837a; }
-
-    .copy-single-btn {
-      display: inline-flex; align-items: center; gap: 0.25rem;
-      padding: 0.375rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 600;
-      background-color: rgba(201,131,122,0.12); color: #a8635b;
+    .copy-btn-inline {
+      display: inline-flex; align-items: center; gap: 0.375rem;
+      padding: 0.375rem 0.875rem; border-radius: 0.5rem;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.01em;
+      background: rgba(181,112,106,0.08); color: #b5706a;
       transition: all 0.2s ease; cursor: pointer; border: none;
     }
-    .copy-single-btn:hover { background-color: rgba(201,131,122,0.25); }
-    .copy-single-btn.copied { background-color: #a8635b; color: white; }
+    .copy-btn-inline:hover { background: rgba(181,112,106,0.16); }
+    .copy-btn-inline.copied { background: #b5706a; color: white; }
+
+    .tag-pill {
+      display: inline-block; background: rgba(181,112,106,0.08);
+      color: #b5706a; padding: 0.3rem 0.875rem; border-radius: 0.5rem;
+      font-size: 0.8rem; font-weight: 500; cursor: pointer;
+      transition: all 0.2s ease; border: 1px solid transparent;
+    }
+    .tag-pill:hover { background: rgba(181,112,106,0.16); border-color: rgba(181,112,106,0.2); }
+
+    .option-btn {
+      padding: 0.5rem 1.25rem; border-radius: 0.625rem; font-size: 0.85rem; font-weight: 600;
+      border: 1.5px solid #d6c4b8; color: #6b4f43; background: white;
+      transition: all 0.2s ease; cursor: pointer; letter-spacing: 0.01em;
+    }
+    .option-btn:hover { border-color: #c9918b; color: #b5706a; }
+    .option-btn.active { background: #b5706a; color: white; border-color: #b5706a; box-shadow: 0 2px 8px rgba(181,112,106,0.25); }
+
+    .spinner {
+      border: 3px solid #d6c4b8; border-top: 3px solid #b5706a; border-radius: 50%;
+      width: 28px; height: 28px; animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in { animation: fadeInUp 0.4s ease forwards; }
+
+    .section-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: #b5706a;
+    }
+
+    .field-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #b5706a; margin-bottom: 0.375rem;
+    }
+
+    .field-box {
+      background: #faf6f1; border: 1px solid rgba(214,196,184,0.4);
+      border-radius: 0.75rem; padding: 0.875rem 1rem;
+    }
 
     .history-item {
-      background: white; border: 1px solid rgba(212,184,168,0.3); border-radius: 1rem;
-      padding: 1rem 1.25rem; transition: all 0.2s ease; cursor: pointer;
+      background: white; border: 1px solid rgba(214,196,184,0.3);
+      border-radius: 1rem; padding: 1rem 1.25rem;
+      transition: all 0.2s ease; cursor: pointer;
     }
-    .history-item:hover { box-shadow: 0 4px 15px rgba(124, 92, 74, 0.1); }
+    .history-item:hover { box-shadow: 0 4px 16px rgba(107,79,67,0.06); border-color: rgba(181,112,106,0.2); }
+
+    .divider {
+      height: 1px; background: linear-gradient(to right, transparent, #d6c4b8, transparent);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 100;
+      background: #2a1f1a; color: white; padding: 0.875rem 1.5rem;
+      border-radius: 0.75rem; font-size: 0.85rem; font-weight: 500;
+      box-shadow: 0 8px 24px rgba(42,31,26,0.3);
+      animation: fadeInUp 0.3s ease;
+    }
   </style>
 </head>
 
 <body>
 
   <!-- NAVIGATION -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-brownLight/30">
-    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="#" class="font-display text-2xl font-bold text-rose tracking-wide">vo herzn</a>
+  <header class="fixed top-0 left-0 right-0 z-50 bg-cream/90 backdrop-blur-md" id="site-header">
+    <nav class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2.5">
+        <span class="font-display text-2xl font-bold text-dark tracking-wide" style="font-style: italic;">vo herzn</span>
+        <span class="text-brownLight text-xs font-medium tracking-wider uppercase hidden sm:inline">handmade</span>
+      </a>
       <ul class="hidden md:flex gap-8 items-center">
-        <li><a href="#generator" class="nav-link">Listing Generator</a></li>
+        <li><a href="#generator" class="nav-link">Generator</a></li>
         <li><a href="#verlauf" class="nav-link">Verlauf</a></li>
         <li><a href="#ueber-uns" class="nav-link">Ueber uns</a></li>
         <li><a href="#kontakt" class="nav-link">Kontakt</a></li>
       </ul>
-      <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menu oeffnen">
-        <span class="w-6 h-0.5 bg-dark transition-all duration-300" id="bar1"></span>
-        <span class="w-6 h-0.5 bg-dark transition-all duration-300" id="bar2"></span>
-        <span class="w-6 h-0.5 bg-dark transition-all duration-300" id="bar3"></span>
+      <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menu">
+        <span class="w-5 h-0.5 bg-dark rounded transition-all duration-300" id="bar1"></span>
+        <span class="w-5 h-0.5 bg-dark rounded transition-all duration-300" id="bar2"></span>
+        <span class="w-5 h-0.5 bg-dark rounded transition-all duration-300" id="bar3"></span>
       </button>
     </nav>
-    <div id="mobile-menu" class="md:hidden bg-cream border-t border-brownLight/30">
+    <div id="mobile-menu" class="md:hidden bg-cream/95 backdrop-blur-md border-t border-brownPale/30">
       <ul class="flex flex-col px-6 py-4 gap-4">
-        <li><a href="#generator" class="nav-link block py-1" onclick="closeMobileMenu()">Listing Generator</a></li>
+        <li><a href="#generator" class="nav-link block py-1" onclick="closeMobileMenu()">Generator</a></li>
         <li><a href="#verlauf" class="nav-link block py-1" onclick="closeMobileMenu()">Verlauf</a></li>
         <li><a href="#ueber-uns" class="nav-link block py-1" onclick="closeMobileMenu()">Ueber uns</a></li>
         <li><a href="#kontakt" class="nav-link block py-1" onclick="closeMobileMenu()">Kontakt</a></li>
@@ -143,46 +197,44 @@
 
 
   <!-- HERO -->
-  <section class="pt-32 pb-16 px-6">
-    <div class="max-w-4xl mx-auto text-center">
-      <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-4" data-aos="fade-down">Vo Herz'n Etsy Tool</p>
-      <h1 class="font-display text-4xl md:text-6xl font-bold text-dark leading-tight mb-6" data-aos="fade-up">
-        Etsy Listings <br><span class="text-rose">auf Knopfdruck.</span>
+  <section class="pt-36 pb-20 px-6">
+    <div class="max-w-3xl mx-auto text-center">
+      <div id="season-badge" class="inline-flex items-center gap-2 bg-white rounded-lg px-4 py-2 shadow-sm border border-brownPale/30 mb-8" data-aos="fade-down">
+        <span id="season-icon" class="text-lg">&#127800;</span>
+        <span id="season-text" class="text-xs font-medium text-brown tracking-wide">Saison wird geladen...</span>
+      </div>
+      <h1 class="font-display text-5xl md:text-7xl font-bold text-dark leading-[1.1] mb-6" data-aos="fade-up">
+        Etsy Listings,<br><span class="text-rose" style="font-style: italic;">vo Herzn gmacht.</span>
       </h1>
-      <p class="text-lg text-brown mb-4 max-w-2xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="100">
+      <p class="text-base text-brownLight mb-10 max-w-xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="100">
         Lade deine Produktfotos hoch und bekomme fertige Etsy-Texte &mdash;
         Titel, Beschreibung und 13 Tags, automatisch an die Saison angepasst.
       </p>
-      <!-- Saison-Badge -->
-      <div id="season-badge" class="inline-flex items-center gap-2 bg-white rounded-full px-5 py-2.5 shadow-sm border border-brownLight/30 mt-2" data-aos="fade-up" data-aos-delay="200">
-        <span id="season-icon" class="text-xl">&#127800;</span>
-        <span id="season-text" class="text-sm font-medium text-brown">Saison wird geladen...</span>
-      </div>
+      <a href="#generator" class="btn-primary" data-aos="fade-up" data-aos-delay="200">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        Listing erstellen
+      </a>
     </div>
   </section>
 
 
   <!-- GENERATOR -->
-  <section id="generator" class="py-12 px-6">
-    <div class="max-w-4xl mx-auto">
+  <section id="generator" class="py-16 px-6">
+    <div class="max-w-3xl mx-auto">
 
-      <!-- Einstellungen: Sprache, Stil, Preis -->
-      <div class="bg-white rounded-2xl border border-brownLight/30 p-6 mb-6" data-aos="fade-up">
-        <h3 class="font-display text-lg font-semibold text-dark mb-5">Einstellungen</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-          <!-- Sprache -->
-          <div>
-            <label class="text-xs font-semibold text-rose uppercase tracking-wider block mb-2">Sprache</label>
-            <div class="flex gap-2">
-              <button class="option-btn active" data-group="lang" data-value="de" onclick="selectOption(this)">Deutsch</button>
-              <button class="option-btn" data-group="lang" data-value="en" onclick="selectOption(this)">Englisch</button>
-            </div>
+      <!-- Einstellungen -->
+      <div class="bg-white rounded-2xl border border-brownPale/30 p-6 md:p-8 mb-8 shadow-sm" data-aos="fade-up">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-8 h-8 rounded-lg bg-rose/10 flex items-center justify-center">
+            <svg class="w-4 h-4 text-rose" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           </div>
+          <h3 class="font-display text-xl font-bold text-dark">Einstellungen</h3>
+        </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Stil -->
           <div>
-            <label class="text-xs font-semibold text-rose uppercase tracking-wider block mb-2">Stil</label>
+            <label class="field-label block">Stil</label>
             <div class="flex flex-wrap gap-2">
               <button class="option-btn active" data-group="style" data-value="rustikal" onclick="selectOption(this)">Rustikal</button>
               <button class="option-btn" data-group="style" data-value="modern" onclick="selectOption(this)">Modern</button>
@@ -192,39 +244,42 @@
 
           <!-- Preis -->
           <div>
-            <label class="text-xs font-semibold text-rose uppercase tracking-wider block mb-2" for="price-input">Preis</label>
+            <label class="field-label block" for="price-input">Preis</label>
             <div class="relative">
-              <input type="number" id="price-input" min="0" step="0.01" placeholder="z.B. 24.90"
-                class="w-full border-2 border-brownLight/50 rounded-xl px-4 py-2.5 text-dark font-medium bg-cream/50 focus:border-rose focus:outline-none transition-colors"
+              <input type="number" id="price-input" min="0" step="0.01" placeholder="z.B. 24,90"
+                class="w-full border-1.5 border-brownPale/60 rounded-lg px-4 py-2.5 text-dark font-medium bg-cream/50 focus:border-rose focus:ring-2 focus:ring-rose/10 focus:outline-none transition-all"
               >
-              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-brown font-medium">&euro;</span>
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-brownLight font-semibold text-sm">&euro;</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Drop Zone -->
-      <div id="drop-zone" class="drop-zone bg-white p-12 text-center" data-aos="fade-up">
+      <div id="drop-zone" class="drop-zone p-10 md:p-14 text-center" data-aos="fade-up">
         <input type="file" id="file-input" multiple accept="image/jpeg,image/png,image/webp" class="hidden">
-        <div class="text-5xl mb-4">&#128247;</div>
-        <p class="font-display text-xl font-semibold text-dark mb-2">Produktfotos hochladen</p>
-        <p class="text-brown mb-6">Zieh bis zu 10 Fotos hierher oder klick zum Auswaehlen</p>
-        <button onclick="document.getElementById('file-input').click()" class="btn-primary text-sm !py-2.5 !px-6">
+        <div class="w-16 h-16 rounded-2xl bg-rose/8 flex items-center justify-center mx-auto mb-5">
+          <svg class="w-7 h-7 text-rose" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z"/></svg>
+        </div>
+        <p class="font-display text-xl font-bold text-dark mb-2">Produktfotos hochladen</p>
+        <p class="text-brownLight text-sm mb-6">Zieh bis zu 10 Fotos hierher oder klick zum Auswaehlen</p>
+        <button onclick="document.getElementById('file-input').click()" class="btn-ghost text-sm">
           Fotos auswaehlen
         </button>
       </div>
 
-      <!-- Vorschau der hochgeladenen Bilder -->
-      <div id="preview-area" class="hidden mt-6" data-aos="fade-up">
+      <!-- Vorschau -->
+      <div id="preview-area" class="hidden mt-8" data-aos="fade-up">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="font-display text-lg font-semibold text-dark">
+          <p class="text-sm font-semibold text-dark">
             <span id="photo-count">0</span> Fotos ausgewaehlt
-          </h3>
+          </p>
           <div class="flex gap-3">
-            <button onclick="clearPhotos()" class="text-sm text-brown hover:text-rose transition-colors font-medium">
-              Alle entfernen
+            <button onclick="clearPhotos()" class="text-xs text-brownLight hover:text-rose transition-colors font-medium">
+              Entfernen
             </button>
-            <button id="generate-btn" onclick="generateListings()" class="btn-primary text-sm !py-2.5 !px-6">
+            <button id="generate-btn" onclick="generateListings()" class="btn-primary text-sm !py-2.5 !px-5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z"/></svg>
               Listings generieren
             </button>
           </div>
@@ -233,26 +288,29 @@
       </div>
 
       <!-- Progress -->
-      <div id="progress-area" class="hidden mt-8">
-        <div class="bg-white rounded-2xl p-8 text-center border border-brownLight/30">
-          <div class="spinner mx-auto mb-4"></div>
-          <p class="font-display text-lg font-semibold text-dark mb-2" id="progress-title">Listings werden erstellt...</p>
-          <p class="text-brown text-sm" id="progress-detail">Foto 1 von 3 wird analysiert</p>
-          <div class="w-full bg-brownLight/30 rounded-full h-2 mt-4 max-w-md mx-auto">
-            <div id="progress-bar" class="bg-rose h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+      <div id="progress-area" class="hidden mt-10">
+        <div class="bg-white rounded-2xl p-10 text-center border border-brownPale/30 shadow-sm">
+          <div class="spinner mx-auto mb-5"></div>
+          <p class="font-display text-xl font-bold text-dark mb-2" id="progress-title">Listings werden erstellt...</p>
+          <p class="text-brownLight text-sm" id="progress-detail">Fotos werden analysiert</p>
+          <div class="w-full bg-brownPale/20 rounded-full h-1.5 mt-6 max-w-sm mx-auto">
+            <div id="progress-bar" class="bg-gradient-to-r from-rose to-roseLight h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
           </div>
         </div>
       </div>
 
       <!-- Ergebnisse -->
-      <div id="results-area" class="hidden mt-10">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="font-display text-2xl font-bold text-dark">Deine Etsy Listings</h2>
-          <button id="download-btn" onclick="downloadCSV()" class="flex items-center gap-2 btn-primary text-sm !py-2.5 !px-5">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      <div id="results-area" class="hidden mt-12">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <p class="section-label mb-1" data-aos="fade-right">Ergebnis</p>
+            <h2 class="font-display text-3xl font-bold text-dark" data-aos="fade-right">Deine Etsy Listings</h2>
+          </div>
+          <button id="download-btn" onclick="downloadCSV()" class="btn-ghost flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
             </svg>
-            CSV herunterladen
+            CSV
           </button>
         </div>
         <div id="results-list" class="space-y-6"></div>
@@ -262,21 +320,24 @@
   </section>
 
 
-  <!-- LISTING-VERLAUF -->
-  <section id="verlauf" class="py-20 px-6 bg-white">
-    <div class="max-w-4xl mx-auto">
-      <div class="text-center mb-10">
-        <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-3" data-aos="fade-down">Verlauf</p>
-        <h2 class="font-display text-3xl md:text-4xl font-bold text-dark mb-2" data-aos="fade-up">Deine letzten Listings</h2>
-        <p class="text-brown" data-aos="fade-up" data-aos-delay="100">Gespeichert in deinem Browser &mdash; immer griffbereit.</p>
+  <!-- VERLAUF -->
+  <section id="verlauf" class="py-20 px-6">
+    <div class="max-w-3xl mx-auto">
+      <div class="divider mb-16"></div>
+      <div class="text-center mb-12">
+        <p class="section-label mb-3" data-aos="fade-down">Verlauf</p>
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-dark mb-3" data-aos="fade-up">Deine letzten Listings</h2>
+        <p class="text-brownLight text-sm" data-aos="fade-up" data-aos-delay="100">Gespeichert in deinem Browser &mdash; immer griffbereit.</p>
       </div>
-      <div id="history-empty" class="text-center py-12 text-brown" data-aos="fade-up">
-        <div class="text-4xl mb-3">&#128203;</div>
-        <p>Noch keine Listings erstellt. Generiere dein erstes Listing oben!</p>
+      <div id="history-empty" class="text-center py-16" data-aos="fade-up">
+        <div class="w-14 h-14 rounded-2xl bg-brownPale/20 flex items-center justify-center mx-auto mb-4">
+          <svg class="w-6 h-6 text-brownLight" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+        </div>
+        <p class="text-brownLight text-sm">Noch keine Listings erstellt.</p>
       </div>
-      <div id="history-list" class="space-y-4 hidden" data-aos="fade-up"></div>
-      <div id="history-actions" class="hidden mt-6 text-center" data-aos="fade-up">
-        <button onclick="clearHistory()" class="text-sm text-brown hover:text-rose transition-colors font-medium">
+      <div id="history-list" class="space-y-3 hidden" data-aos="fade-up"></div>
+      <div id="history-actions" class="hidden mt-8 text-center" data-aos="fade-up">
+        <button onclick="clearHistory()" class="text-xs text-brownLight hover:text-rose transition-colors font-medium">
           Verlauf loeschen
         </button>
       </div>
@@ -284,12 +345,14 @@
   </section>
 
 
-  <!-- UEBER UNS (kurz) -->
-  <section id="ueber-uns" class="py-20 px-6 bg-cream">
-    <div class="max-w-4xl mx-auto text-center">
-      <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-3" data-aos="fade-down">Ueber uns</p>
-      <h2 class="font-display text-3xl md:text-4xl font-bold text-dark mb-6" data-aos="fade-up">Vo herzn &mdash; von Herzen.</h2>
-      <p class="text-brown leading-relaxed max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+  <!-- UEBER UNS -->
+  <section id="ueber-uns" class="py-20 px-6 bg-white">
+    <div class="max-w-3xl mx-auto text-center">
+      <p class="section-label mb-3" data-aos="fade-down">Ueber uns</p>
+      <h2 class="font-display text-3xl md:text-4xl font-bold text-dark mb-6" data-aos="fade-up">
+        Vo herzn &mdash; von Herzen.
+      </h2>
+      <p class="text-brownLight leading-relaxed max-w-xl mx-auto" data-aos="fade-up" data-aos-delay="100">
         Ein kleines Gewerbe aus dem Herzen Bayerns. Wir fertigen handgemachte Deko, Accessoires und Unikate &mdash;
         jedes Stueck mit Liebe, Geduld und einem Gespuer fuer das Besondere.
       </p>
@@ -297,34 +360,37 @@
   </section>
 
 
-  <!-- KONTAKT (kurz) -->
-  <section id="kontakt" class="py-20 px-6 bg-white">
-    <div class="max-w-2xl mx-auto text-center">
-      <p class="text-rose font-semibold tracking-widest uppercase text-sm mb-3" data-aos="fade-down">Kontakt</p>
+  <!-- KONTAKT -->
+  <section id="kontakt" class="py-20 px-6">
+    <div class="max-w-xl mx-auto text-center">
+      <p class="section-label mb-3" data-aos="fade-down">Kontakt</p>
       <h2 class="font-display text-3xl font-bold text-dark mb-4" data-aos="fade-up">Fragen oder Feedback?</h2>
-      <p class="text-brown mb-6" data-aos="fade-up" data-aos-delay="100">
+      <p class="text-brownLight mb-8 text-sm" data-aos="fade-up" data-aos-delay="100">
         Schreib uns &mdash; wir freuen uns ueber jede Nachricht.
       </p>
-      <a href="mailto:justinsinger777@gmail.com" class="btn-primary" data-aos="fade-up" data-aos-delay="200">E-Mail schreiben</a>
+      <a href="mailto:justinsinger777@gmail.com" class="btn-primary" data-aos="fade-up" data-aos-delay="200">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+        E-Mail schreiben
+      </a>
     </div>
   </section>
 
 
   <!-- FOOTER -->
-  <footer class="bg-dark text-white py-10 px-6">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-      <div>
-        <p class="font-display text-xl font-bold text-rose">vo herzn</p>
-        <p class="text-white/50 text-sm mt-1">Handgemacht aus Bayern</p>
+  <footer class="bg-dark text-white py-12 px-6">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="text-center md:text-left">
+        <p class="font-display text-xl font-bold text-roseLight" style="font-style: italic;">vo herzn</p>
+        <p class="text-white/40 text-xs mt-1 tracking-wide">Handgemacht aus Bayern</p>
       </div>
-      <p class="text-white/40 text-sm">&copy; 2025 vo herzn. Alle Rechte vorbehalten.</p>
+      <p class="text-white/30 text-xs">&copy; 2025 vo herzn. Alle Rechte vorbehalten.</p>
     </div>
   </footer>
 
 
   <!-- JAVASCRIPT -->
   <script>
-    AOS.init({ duration: 700, once: true, offset: 80 });
+    AOS.init({ duration: 600, once: true, offset: 60 });
 
     // --- State ---
     let selectedFiles = [];
@@ -348,34 +414,38 @@
       document.getElementById('bar3').style.transform = '';
     }
 
-    // --- Header Shadow ---
-    const header = document.querySelector('header');
+    // --- Header ---
+    const header = document.getElementById('site-header');
     window.addEventListener('scroll', () => {
-      header.style.boxShadow = window.scrollY > 50 ? '0 4px 20px rgba(44,31,26,0.08)' : 'none';
+      if (window.scrollY > 20) {
+        header.style.boxShadow = '0 1px 12px rgba(42,31,26,0.06)';
+        header.style.borderBottom = '1px solid rgba(214,196,184,0.3)';
+      } else {
+        header.style.boxShadow = 'none';
+        header.style.borderBottom = 'none';
+      }
     });
 
-    // --- Option Buttons (Sprache / Stil) ---
+    // --- Option Buttons (Stil) ---
     function selectOption(btn) {
       const group = btn.dataset.group;
       document.querySelectorAll(`[data-group="${group}"]`).forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      settings[group === 'lang' ? 'lang' : 'style'] = btn.dataset.value;
+      settings.style = btn.dataset.value;
     }
 
-    // --- Saison laden ---
+    // --- Saison ---
     async function loadSeason() {
       try {
         const res = await fetch('/api/season');
         const data = await res.json();
         const icons = { Fruehling: '\u{1F338}', Sommer: '\u{2600}\u{FE0F}', Herbst: '\u{1F342}', Winter: '\u{2744}\u{FE0F}' };
         document.getElementById('season-icon').textContent = icons[data.season] || '\u{1F33F}';
-        let text = `Saison: ${data.season}`;
-        if (data.events.length > 0) {
-          text += ` \u2014 ${data.events.join(', ')} aktiv`;
-        }
-        text += ` | Stimmung: ${data.mood}`;
+        let text = `${data.season}`;
+        if (data.events && data.events.length > 0) text += ` \u2014 ${data.events.join(', ')}`;
+        if (data.mood) text += ` | ${data.mood}`;
         document.getElementById('season-text').textContent = text;
-      } catch (e) {
+      } catch {
         document.getElementById('season-text').textContent = 'Saisonale Anpassung aktiv';
       }
     }
@@ -393,8 +463,7 @@
     });
 
     dropZone.addEventListener('drop', e => {
-      const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
-      addFiles(files);
+      addFiles(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')));
     });
 
     dropZone.addEventListener('click', e => {
@@ -408,8 +477,7 @@
 
     function addFiles(files) {
       const remaining = 10 - selectedFiles.length;
-      const toAdd = files.slice(0, remaining);
-      selectedFiles.push(...toAdd);
+      selectedFiles.push(...files.slice(0, remaining));
       if (selectedFiles.length > 10) selectedFiles = selectedFiles.slice(0, 10);
       updatePreview();
     }
@@ -429,10 +497,7 @@
       const grid = document.getElementById('preview-grid');
       const count = document.getElementById('photo-count');
 
-      if (selectedFiles.length === 0) {
-        area.classList.add('hidden');
-        return;
-      }
+      if (selectedFiles.length === 0) { area.classList.add('hidden'); return; }
 
       area.classList.remove('hidden');
       count.textContent = selectedFiles.length;
@@ -442,21 +507,21 @@
         const div = document.createElement('div');
         div.className = 'relative group';
         const img = document.createElement('img');
-        img.className = 'w-full aspect-square object-cover rounded-xl border border-brownLight/30';
+        img.className = 'w-full aspect-square object-cover rounded-xl border border-brownPale/30';
         img.src = URL.createObjectURL(file);
         const removeBtn = document.createElement('button');
-        removeBtn.className = 'absolute -top-2 -right-2 w-6 h-6 bg-roseDark text-white rounded-full text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center';
+        removeBtn.className = 'absolute -top-2 -right-2 w-6 h-6 bg-rose text-white rounded-full text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center shadow-sm';
         removeBtn.textContent = '\u2715';
         removeBtn.onclick = (e) => { e.stopPropagation(); removeFile(i); };
         const name = document.createElement('p');
-        name.className = 'text-xs text-brown mt-1 truncate';
+        name.className = 'text-xs text-brownLight mt-1 truncate';
         name.textContent = file.name;
         div.append(img, removeBtn, name);
         grid.appendChild(div);
       });
     }
 
-    // --- Generate Listings ---
+    // --- Generate ---
     async function generateListings() {
       if (selectedFiles.length === 0) return;
 
@@ -467,14 +532,12 @@
       const resultsArea = document.getElementById('results-area');
 
       generateBtn.disabled = true;
-      generateBtn.textContent = 'Wird generiert...';
-      generateBtn.style.opacity = '0.6';
       progressArea.classList.remove('hidden');
       resultsArea.classList.add('hidden');
       generatedResults = [];
 
       document.getElementById('progress-title').textContent = 'Listings werden erstellt...';
-      document.getElementById('progress-detail').textContent = `${selectedFiles.length} Fotos werden analysiert \u2014 das dauert ca. ${selectedFiles.length * 15}-${selectedFiles.length * 25} Sekunden`;
+      document.getElementById('progress-detail').textContent = `${selectedFiles.length} Foto(s) werden analysiert`;
       document.getElementById('progress-bar').style.width = '10%';
 
       try {
@@ -485,7 +548,7 @@
         }
 
         document.getElementById('progress-bar').style.width = '30%';
-        document.getElementById('progress-detail').textContent = 'Fotos werden von der KI analysiert...';
+        document.getElementById('progress-detail').textContent = 'KI analysiert deine Fotos...';
 
         const res = await fetch('/api/generate', {
           method: 'POST',
@@ -504,28 +567,23 @@
         }
 
         document.getElementById('progress-bar').style.width = '90%';
-
         const data = await res.json();
         generatedResults = data.results;
-
         document.getElementById('progress-bar').style.width = '100%';
         document.getElementById('progress-detail').textContent = 'Fertig!';
 
-        // Im Verlauf speichern
         saveToHistory(generatedResults);
 
         setTimeout(() => {
           progressArea.classList.add('hidden');
           displayResults();
-        }, 500);
+        }, 400);
 
       } catch (err) {
         progressArea.classList.add('hidden');
         alert('Fehler: ' + err.message);
       } finally {
         generateBtn.disabled = false;
-        generateBtn.textContent = 'Listings generieren';
-        generateBtn.style.opacity = '1';
       }
     }
 
@@ -547,15 +605,15 @@
 
       generatedResults.forEach((result, i) => {
         const card = document.createElement('div');
-        card.className = 'listing-card bg-white rounded-2xl border border-brownLight/30 overflow-hidden animate-in';
-        card.style.animationDelay = `${i * 100}ms`;
+        card.className = 'listing-card animate-in';
+        card.style.animationDelay = `${i * 80}ms`;
 
         if (result.error) {
           card.innerHTML = `
             <div class="p-6">
               <div class="flex items-center gap-3 mb-2">
-                <span class="text-red-500 text-lg">&#9888;</span>
-                <h3 class="font-display text-lg font-semibold text-dark">${escapeHtml(result.filename)}</h3>
+                <span class="text-red-500">&#9888;</span>
+                <h3 class="font-display text-lg font-bold text-dark">${escapeHtml(result.filename)}</h3>
               </div>
               <p class="text-red-500 text-sm">${escapeHtml(result.error)}</p>
             </div>`;
@@ -569,19 +627,22 @@
           `<span class="tag-pill" onclick="copyText('${escapeHtml(tag)}')" title="Klick zum Kopieren">${escapeHtml(tag)}</span>`
         ).join(' ');
 
-        const priceDisplay = settings.price ? `<span class="ml-2 text-rose font-bold">${escapeHtml(settings.price)} \u20AC</span>` : '';
+        const priceDisplay = settings.price ? `<span class="ml-3 text-rose font-bold text-sm">${escapeHtml(settings.price)} \u20AC</span>` : '';
 
         card.innerHTML = `
-          <div class="bg-gradient-to-r from-rose/5 to-transparent px-6 py-4 border-b border-brownLight/20">
-            <div class="flex items-center justify-between">
-              <div>
-                <span class="text-xs font-semibold text-rose uppercase tracking-wider">Listing ${i + 1}</span>
-                <h3 class="font-display text-lg font-bold text-dark mt-0.5">${escapeHtml(product.product_name)}${priceDisplay}</h3>
-                <p class="text-xs text-brown">${escapeHtml(product.category)} &middot; ${escapeHtml(product.materials.join(', '))}</p>
+          <div class="px-6 py-5 border-b border-brownPale/20">
+            <div class="flex items-start justify-between gap-4">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="section-label">Listing ${i + 1}</span>
+                  ${priceDisplay}
+                </div>
+                <h3 class="font-display text-xl font-bold text-dark">${escapeHtml(product.product_name)}</h3>
+                <p class="text-xs text-brownLight mt-0.5">${escapeHtml(product.category)} &middot; ${escapeHtml(product.materials.join(', '))}</p>
               </div>
-              <button onclick="copyListing(${i})" class="text-sm text-rose hover:text-roseDark font-semibold transition-colors flex items-center gap-1">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+              <button onclick="copyListing(${i})" class="copy-btn-inline shrink-0 mt-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                 </svg>
                 Alles kopieren
               </button>
@@ -589,34 +650,34 @@
           </div>
           <div class="p-6 space-y-5">
             <!-- Titel -->
-            <div class="copy-group">
-              <div class="flex items-center justify-between mb-1.5">
-                <label class="text-xs font-semibold text-rose uppercase tracking-wider">Titel</label>
-                <button onclick="copySingle(this, generatedResults[${i}].listing.title)" class="copy-single-btn">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                  Titel kopieren
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label class="field-label">Titel</label>
+                <button onclick="copySingle(this, generatedResults[${i}].listing.title)" class="copy-btn-inline">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  Kopieren
                 </button>
               </div>
-              <p class="text-dark font-semibold leading-relaxed bg-cream rounded-xl px-4 py-3 border border-brownLight/20">${escapeHtml(listing.title)}</p>
+              <div class="field-box font-semibold text-dark">${escapeHtml(listing.title)}</div>
             </div>
             <!-- Beschreibung -->
-            <div class="copy-group">
-              <div class="flex items-center justify-between mb-1.5">
-                <label class="text-xs font-semibold text-rose uppercase tracking-wider">Beschreibung</label>
-                <button onclick="copySingle(this, generatedResults[${i}].listing.description)" class="copy-single-btn">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                  Beschreibung kopieren
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label class="field-label">Beschreibung</label>
+                <button onclick="copySingle(this, generatedResults[${i}].listing.description)" class="copy-btn-inline">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  Kopieren
                 </button>
               </div>
-              <div class="text-brown leading-relaxed bg-cream rounded-xl px-4 py-3 border border-brownLight/20 text-sm whitespace-pre-line">${escapeHtml(listing.description)}</div>
+              <div class="field-box text-brown text-sm leading-relaxed whitespace-pre-line">${escapeHtml(listing.description)}</div>
             </div>
             <!-- Tags -->
-            <div class="copy-group">
-              <div class="flex items-center justify-between mb-1.5">
-                <label class="text-xs font-semibold text-rose uppercase tracking-wider">13 Tags</label>
-                <button onclick="copySingle(this, generatedResults[${i}].listing.tags.join(', '))" class="copy-single-btn">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                  Tags kopieren
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label class="field-label">13 Tags</label>
+                <button onclick="copySingle(this, generatedResults[${i}].listing.tags.join(', '))" class="copy-btn-inline">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  Kopieren
                 </button>
               </div>
               <div class="flex flex-wrap gap-2">${tagsHtml}</div>
@@ -629,12 +690,12 @@
       area.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // --- Copy Functions ---
+    // --- Copy ---
     async function copyText(text) {
       try {
         await navigator.clipboard.writeText(text);
         showToast('Kopiert!');
-      } catch (e) {
+      } catch {
         const ta = document.createElement('textarea');
         ta.value = text; document.body.appendChild(ta);
         ta.select(); document.execCommand('copy');
@@ -645,15 +706,13 @@
 
     async function copySingle(btn, text) {
       await copyText(text);
-      const originalText = btn.innerHTML;
       btn.classList.add('copied');
-      const label = btn.querySelector('svg').nextSibling;
-      const textNode = btn.childNodes[btn.childNodes.length - 1];
-      textNode.textContent = ' Kopiert!';
+      const origHtml = btn.innerHTML;
+      const svgMatch = origHtml.match(/<svg[\s\S]*?<\/svg>/);
+      btn.innerHTML = (svgMatch ? svgMatch[0] : '') + ' Kopiert!';
       setTimeout(() => {
         btn.classList.remove('copied');
-        textNode.textContent = originalText.includes('Titel') ? ' Titel kopieren' :
-                               originalText.includes('Beschreibung') ? ' Beschreibung kopieren' : ' Tags kopieren';
+        btn.innerHTML = origHtml;
       }, 1500);
     }
 
@@ -665,17 +724,16 @@
     }
 
     function showToast(msg) {
-      const existing = document.getElementById('toast');
+      const existing = document.querySelector('.toast');
       if (existing) existing.remove();
       const toast = document.createElement('div');
-      toast.id = 'toast';
-      toast.className = 'fixed bottom-6 right-6 bg-dark text-white px-5 py-3 rounded-xl shadow-lg text-sm font-medium z-50';
+      toast.className = 'toast';
       toast.textContent = msg;
       document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 2000);
     }
 
-    // --- CSV Download ---
+    // --- CSV ---
     function downloadCSV() {
       if (generatedResults.length === 0) return;
 
@@ -698,31 +756,28 @@
         row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
       ).join('\n');
 
-      const BOM = '\uFEFF';
-      const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      const today = new Date().toISOString().split('T')[0];
-      a.download = `vo-herzn-listings-${today}.csv`;
+      a.download = `vo-herzn-listings-${new Date().toISOString().split('T')[0]}.csv`;
       a.click();
       URL.revokeObjectURL(url);
       showToast('CSV heruntergeladen!');
     }
 
-    // --- Listing-Verlauf (localStorage) ---
+    // --- Verlauf (localStorage) ---
     const HISTORY_KEY = 'voherzn_listing_history';
     const MAX_HISTORY = 20;
 
     function getHistory() {
-      try {
-        return JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
-      } catch { return []; }
+      try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
+      catch { return []; }
     }
 
     function saveToHistory(results) {
       const history = getHistory();
-      const entry = {
+      history.unshift({
         id: Date.now(),
         date: new Date().toLocaleString('de-DE'),
         settings: { ...settings },
@@ -733,8 +788,7 @@
           description: r.listing.description,
           tags: r.listing.tags,
         })),
-      };
-      history.unshift(entry);
+      });
       if (history.length > MAX_HISTORY) history.length = MAX_HISTORY;
       localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
       renderHistory();
@@ -763,21 +817,20 @@
         div.className = 'history-item';
 
         const productNames = entry.results.map(r => r.product_name).join(', ');
-        const langLabel = entry.settings.lang === 'de' ? 'Deutsch' : 'Englisch';
         const priceLabel = entry.settings.price ? ` | ${entry.settings.price} \u20AC` : '';
 
         div.innerHTML = `
           <div class="flex items-center justify-between">
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-3 mb-1">
-                <p class="font-display font-semibold text-dark truncate">${escapeHtml(productNames || 'Listing')}</p>
-                <span class="text-xs text-brown/60 whitespace-nowrap">${escapeHtml(entry.date)}</span>
+                <p class="font-display font-bold text-dark truncate">${escapeHtml(productNames || 'Listing')}</p>
+                <span class="text-xs text-brownLight whitespace-nowrap">${escapeHtml(entry.date)}</span>
               </div>
-              <p class="text-xs text-brown">${entry.results.length} Listing(s) | ${escapeHtml(langLabel)} | ${escapeHtml(entry.settings.style)}${priceLabel}</p>
+              <p class="text-xs text-brownLight">${entry.results.length} Listing(s) | ${escapeHtml(entry.settings.style)}${priceLabel}</p>
             </div>
             <div class="flex items-center gap-2 ml-4">
-              <button onclick="loadFromHistory(${idx})" class="copy-single-btn">Laden</button>
-              <button onclick="removeFromHistory(${idx})" class="text-xs text-brown/50 hover:text-rose transition-colors" title="Entfernen">&times;</button>
+              <button onclick="loadFromHistory(${idx})" class="copy-btn-inline">Laden</button>
+              <button onclick="removeFromHistory(${idx})" class="text-sm text-brownLight/50 hover:text-rose transition-colors px-1" title="Entfernen">&times;</button>
             </div>
           </div>`;
 
@@ -790,21 +843,16 @@
       const entry = history[idx];
       if (!entry) return;
 
-      // Einstellungen wiederherstellen
-      document.querySelectorAll(`[data-group="lang"]`).forEach(b => {
-        b.classList.toggle('active', b.dataset.value === entry.settings.lang);
-      });
-      document.querySelectorAll(`[data-group="style"]`).forEach(b => {
+      document.querySelectorAll('[data-group="style"]').forEach(b => {
         b.classList.toggle('active', b.dataset.value === entry.settings.style);
       });
-      settings.lang = entry.settings.lang;
+      settings.lang = 'de';
       settings.style = entry.settings.style;
       if (entry.settings.price) {
         document.getElementById('price-input').value = entry.settings.price;
         settings.price = entry.settings.price;
       }
 
-      // Ergebnisse anzeigen
       generatedResults = entry.results.map(r => ({
         product: { product_name: r.product_name, category: r.category, materials: [] },
         listing: { title: r.title, description: r.description, tags: r.tags },
@@ -812,7 +860,7 @@
 
       displayResults();
       document.getElementById('results-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      showToast('Listing aus Verlauf geladen!');
+      showToast('Listing geladen');
     }
 
     function removeFromHistory(idx) {
@@ -820,7 +868,7 @@
       history.splice(idx, 1);
       localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
       renderHistory();
-      showToast('Eintrag entfernt');
+      showToast('Entfernt');
     }
 
     function clearHistory() {
@@ -829,7 +877,6 @@
       showToast('Verlauf geloescht');
     }
 
-    // Verlauf beim Laden rendern
     renderHistory();
 
     // --- Helpers ---
