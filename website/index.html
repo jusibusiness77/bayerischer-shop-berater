@@ -1202,6 +1202,7 @@
             <div><div class="flex items-center justify-between mb-2"><label class="field-label">Titel</label><button onclick="copySingle(this, generatedResults[${i}].listing.title)" class="copy-btn-inline"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> Kopieren</button></div><div class="field-box font-semibold text-dark">${escapeHtml(listing.title)}</div></div>
             <div><div class="flex items-center justify-between mb-2"><label class="field-label">Beschreibung</label><button onclick="copySingle(this, generatedResults[${i}].listing.description)" class="copy-btn-inline"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> Kopieren</button></div><div class="field-box text-brown text-sm leading-relaxed whitespace-pre-line">${escapeHtml(listing.description)}</div></div>
             <div><div class="flex items-center justify-between mb-2"><label class="field-label">13 Tags</label><button onclick="copySingle(this, generatedResults[${i}].listing.tags.join(', '))" class="copy-btn-inline"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> Kopieren</button></div><div class="flex flex-wrap gap-2">${tagsHtml}</div></div>
+            <div class="pt-2"><button onclick="copyAllAndOpenEtsy(${i})" class="btn-primary text-sm !py-2.5 !px-5 w-full justify-center"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg> Alles kopieren &amp; Etsy &ouml;ffnen</button></div>
           </div>`;
         list.appendChild(card);
       });
@@ -1225,6 +1226,16 @@
       const r = generatedResults[index];
       if (!r || r.error) return;
       copyText(`TITEL:\n${r.listing.title}\n\nBESCHREIBUNG:\n${r.listing.description}\n\nTAGS:\n${r.listing.tags.join(', ')}`);
+    }
+    async function copyAllAndOpenEtsy(index) {
+      const r = generatedResults[index];
+      if (!r || r.error) return;
+      const priceLine = settings.price ? `\n\nPREIS:\n${settings.price} €` : '';
+      const text = `TITEL:\n${r.listing.title}\n\nBESCHREIBUNG:\n${r.listing.description}\n\nTAGS:\n${r.listing.tags.join(', ')}${priceLine}`;
+      try { await navigator.clipboard.writeText(text); }
+      catch { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }
+      window.open('https://www.etsy.com/sell/listings/create', '_blank', 'noopener');
+      showToast('Alles kopiert! Etsy ist bereit.');
     }
     function showToast(msg) {
       const existing = document.querySelector('.toast');
