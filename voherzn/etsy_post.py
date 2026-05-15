@@ -1,41 +1,71 @@
+"""Postet ein generiertes Listing als Draft auf Etsy (Etsy Open API v3)."""
+
+from __future__ import annotations
+
 import os
-import requests
-from dotenv import load_dotenv
 from pathlib import Path
 
-load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+import requests
+from dotenv import load_dotenv
 
-ETSY_API_KEY = os.environ.get("ETSY_API_KEY")
-ETSY_SECRET = os.environ.get("ETSY_SECRET")
-ETSY_SHOP_ID = os.environ.get("ETSY_SHOP_ID")
-ETSY_ACCESS_TOKEN = os.environ.get("ETSY_ACCESS_TOKEN")
+ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 
-def post_listing_to_etsy(listing: dict) -> dict:
-    """Postet ein generiertes Listing direkt auf Etsy"""
-    
+
+def _env(key: str) -> str | None:
+    load_dotenv(ENV_PATH, override=True)
+    return os.environ.get(key)
+
+
+def post_listing_to_etsy(listing: dict, price: float | None = None) -> dict:
+    api_key = _env("ETSY_API_KEY")
+    access_token = _env("ETSY_ACCESS_TOKEN")
+    shop_id = _env("ETSY_SHOP_ID")
+
+    if not api_key:
+        return {"success": False, "error": "ETSY_API_KEY fehlt in .env"}
+    if not access_token:
+        return {"success": False, "error": "Nicht authentifiziert. Bitte zuerst /auth/etsy aufrufen.", "needs_auth": True}
+    if not shop_id:
+        return {"success": False, "error": "ETSY_SHOP_ID fehlt - Auth wiederholen."}
+
     headers = {
-        "x-api-key": ETSY_API_KEY,
-        "Authorization": f"Bearer {ETSY_ACCESS_TOKEN}",
-        "Content-Type": "application/json"
+        "x-api-key": api_key,
+        "Authorization": f"Bearer {access_token}",
     }
-    
+
+    try:
+        listing_price = float(price) if price else 29.90
+    except (TypeError, ValueError):
+        listing_price = 29.90
+
     payload = {
-        "title": listing.get("title", "")[:140],
-        "description": listing.get("description", ""),
-        "price": listing.get("price", 29.90),
         "quantity": 1,
+        "title": (listing.get("title") or "")[:140],
+        "description": listing.get("description") or "",
+        "price": listing_price,
         "who_made": "i_did",
         "when_made": "made_to_order",
-        "is_supply": False,
         "taxonomy_id": 68887515,
-        "tags": listing.get("tags", [])[:13],
-        "state": "draft"
+        "tags": (listing.get("tags") or [])[:13],
+        "state": "draft",
     }
-    
-    url = f"https://openapi.etsy.com/v3/application/shops/{ETSY_SHOP_ID}/listings"
-    response = requests.post(url, json=payload, headers=headers)
-    
-    if response.status_code == 201:
-        return {"success": True, "listing_id": response.json().get("listing_id")}
-    else:
-        return {"success": False, "error": response.text}
+
+    url = f"https://openapi.etsy.com/v3/application/shops/{shop_id}/listings"
+    try:
+        response = requests.post(url, data=payload, headers=headers, timeout=30)
+    except requests.RequestException as exc:
+        return {"success": False, "error": f"Netzwerkfehler: {exc}"}
+
+    if response.status_code == 401:
+        return {"success": False, "error": "Token abgelaufen. Bitte erneut /auth/etsy aufrufen.", "needs_auth": True}
+
+    if response.status_code in (200, 201):
+        body = response.json()
+        listing_id = body.get("listing_id")
+        return {
+            "success": True,
+            "listing_id": listing_id,
+            "url": f"https://www.etsy.com/your/shops/me/tools/listings/{listing_id}" if listing_id else None,
+        }
+
+    return {"success": False, "error": f"Etsy {response.status_code}: {response.text}"}
