@@ -1144,6 +1144,12 @@
         document.getElementById('progress-bar').style.width = '90%';
         const data = await res.json();
         generatedResults = data.results;
+        generatedResults.forEach((r, i) => {
+          if (images[i]) {
+            r.image_data = images[i].data;
+            r.image_name = images[i].name;
+          }
+        });
         document.getElementById('progress-bar').style.width = '100%';
         document.getElementById('progress-detail').textContent = 'Fertig!';
         saveToHistory(generatedResults);
@@ -1251,7 +1257,7 @@
         const res = await fetch('/api/etsy/post', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ listing: r.listing, price: settings.price || null }),
+          body: JSON.stringify({ listing: r.listing, price: settings.price || null, image_data: r.image_data || null, image_name: r.image_name || null }),
         });
         const data = await res.json().catch(() => ({}));
         if (res.status === 401 || data.needs_auth) {
@@ -1260,7 +1266,13 @@
           return;
         }
         if (data.success) {
-          showToast('Als Draft auf Etsy erstellt!');
+          if (data.image_uploaded) {
+            showToast('Als Draft mit Foto auf Etsy erstellt!');
+          } else if (data.image_error) {
+            showToast('Draft erstellt, Foto-Upload fehlgeschlagen: ' + data.image_error);
+          } else {
+            showToast('Als Draft auf Etsy erstellt!');
+          }
           if (data.url) window.open(data.url, '_blank', 'noopener');
         } else {
           showToast('Fehler: ' + (data.error || res.status));

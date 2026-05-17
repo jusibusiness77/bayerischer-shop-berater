@@ -163,7 +163,12 @@ def etsy_post():
     if not listing or not listing.get("title"):
         return jsonify({"success": False, "error": "Listing-Daten fehlen"}), 400
 
-    result = post_listing_to_etsy(listing, price=data.get("price"))
+    result = post_listing_to_etsy(
+        listing,
+        price=data.get("price"),
+        image_data=data.get("image_data"),
+        image_name=data.get("image_name"),
+    )
     status = 200 if result.get("success") else (401 if result.get("needs_auth") else 400)
     return jsonify(result), status
 

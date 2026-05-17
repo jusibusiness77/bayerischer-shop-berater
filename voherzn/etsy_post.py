@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import base64
 import os
 from pathlib import Path
 
@@ -16,7 +17,55 @@ def _env(key: str) -> str | None:
     return os.environ.get(key)
 
 
-def post_listing_to_etsy(listing: dict, price: float | None = None) -> dict:
+def _decode_image(image_data: str) -> tuple[bytes, str]:
+    """Akzeptiert data-URI oder reines base64. Gibt (bytes, mime) zurueck."""
+    mime = "image/jpeg"
+    encoded = image_data
+    if image_data.startswith("data:"):
+        header, encoded = image_data.split(",", 1)
+        if ";" in header:
+            mime = header.split(":", 1)[1].split(";", 1)[0] or mime
+    return base64.b64decode(encoded), mime
+
+
+def _upload_image(
+    shop_id: str,
+    listing_id: int,
+    image_data: str,
+    image_name: str | None,
+    headers: dict,
+) -> dict:
+    try:
+        image_bytes, mime = _decode_image(image_data)
+    except Exception as exc:
+        return {"uploaded": False, "error": f"Bild konnte nicht dekodiert werden: {exc}"}
+
+    ext = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp"}.get(mime, ".jpg")
+    filename = image_name or f"foto{ext}"
+
+    url = f"https://openapi.etsy.com/v3/application/shops/{shop_id}/listings/{listing_id}/images"
+    files = {"image": (filename, image_bytes, mime)}
+    data = {"rank": 1, "overwrite": "true"}
+
+    upload_headers = {k: v for k, v in headers.items() if k.lower() != "content-type"}
+
+    try:
+        r = requests.post(url, headers=upload_headers, files=files, data=data, timeout=60)
+    except requests.RequestException as exc:
+        return {"uploaded": False, "error": f"Netzwerkfehler beim Bild-Upload: {exc}"}
+
+    if r.status_code in (200, 201):
+        return {"uploaded": True, "listing_image_id": r.json().get("listing_image_id")}
+
+    return {"uploaded": False, "error": f"Etsy {r.status_code}: {r.text}"}
+
+
+def post_listing_to_etsy(
+    listing: dict,
+    price: float | None = None,
+    image_data: str | None = None,
+    image_name: str | None = None,
+) -> dict:
     api_key = _env("ETSY_API_KEY")
     shared_secret = _env("ETSY_SHARED_SECRET")
     access_token = _env("ETSY_ACCESS_TOKEN")
@@ -73,10 +122,21 @@ def post_listing_to_etsy(listing: dict, price: float | None = None) -> dict:
     if response.status_code in (200, 201):
         body = response.json()
         listing_id = body.get("listing_id")
-        return {
+        result = {
             "success": True,
             "listing_id": listing_id,
             "url": f"https://www.etsy.com/your/shops/me/tools/listings/{listing_id}" if listing_id else None,
         }
+
+        if listing_id and image_data:
+            upload = _upload_image(shop_id, listing_id, image_data, image_name, headers)
+            result["image_uploaded"] = upload.get("uploaded", False)
+            if not upload.get("uploaded"):
+                result["image_error"] = upload.get("error")
+        elif listing_id and not image_data:
+            result["image_uploaded"] = False
+            result["image_error"] = "Kein Bild mitgesendet."
+
+        return result
 
     return {"success": False, "error": f"Etsy {response.status_code}: {response.text}"}
