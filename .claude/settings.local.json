@@ -24,7 +24,13 @@
       "Bash(python3 -m pytest tests/test_instagram.py -v)",
       "Bash(python3:*)",
       "Bash(pkill -f \"python3 app.py\")",
-      "Bash(pkill -f \"python3.*app.py\")"
+      "Bash(pkill -f \"python3.*app.py\")",
+      "Bash(git -C /Users/juu777/vo-herzn-projekt remote -v)",
+      "Bash(git -C /Users/juu777/vo-herzn-projekt branch -vv)",
+      "Bash(git -C /Users/juu777/vo-herzn-projekt diff voherzn/etsy_post.py)",
+      "Bash(git -C /Users/juu777/vo-herzn-projekt add voherzn/etsy_post.py)",
+      "Bash(git -C /Users/juu777/vo-herzn-projekt commit -m ' *)",
+      "Bash(git -C /Users/juu777/vo-herzn-projekt push origin main)"
     ]
   }
 }
