@@ -63,10 +63,10 @@ SAISONALER KONTEXT:
 Erstelle bitte:
 
 TITEL:
-(Max 140 Zeichen, SEO-optimiert, mit relevanten Keywords und Pipes als Trenner)
+(Max 140 Zeichen, SEO-optimiert, mit relevanten Keywords und Pipes als Trenner, bayerisch-warm)
 
 BESCHREIBUNG:
-(150-200 Woerter, bayerisch-warm und herzlich, beschreibe das Produkt liebevoll, erwaehne Materialien und Anlass)
+(Sauberes Hochdeutsch, KEIN bayerischer Dialekt. Maximal 3-4 kurze Absaetze, durch Leerzeilen getrennt. Insgesamt knapp und auf den Punkt - kein Ueberfluss. Erwaehne Material, Anlass und Besonderheit, ohne zu schwafeln.)
 
 TAGS:
 (Genau 13 Tags, jeweils max 20 Zeichen, kommagetrennt, SEO-relevant)
