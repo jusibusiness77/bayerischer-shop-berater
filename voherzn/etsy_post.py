@@ -18,18 +18,21 @@ def _env(key: str) -> str | None:
 
 def post_listing_to_etsy(listing: dict, price: float | None = None) -> dict:
     api_key = _env("ETSY_API_KEY")
+    shared_secret = _env("ETSY_SHARED_SECRET")
     access_token = _env("ETSY_ACCESS_TOKEN")
     shop_id = _env("ETSY_SHOP_ID")
 
     if not api_key:
         return {"success": False, "error": "ETSY_API_KEY fehlt in .env"}
+    if not shared_secret:
+        return {"success": False, "error": "ETSY_SHARED_SECRET fehlt in .env"}
     if not access_token:
         return {"success": False, "error": "Nicht authentifiziert. Bitte zuerst /auth/etsy aufrufen.", "needs_auth": True}
     if not shop_id:
         return {"success": False, "error": "ETSY_SHOP_ID fehlt - Auth wiederholen."}
 
     headers = {
-        "x-api-key": api_key,
+        "x-api-key": f"{api_key}:{shared_secret}",
         "Authorization": f"Bearer {access_token}",
     }
 

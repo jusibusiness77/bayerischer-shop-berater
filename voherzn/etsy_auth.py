@@ -15,7 +15,7 @@ ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 
 AUTH_URL = "https://www.etsy.com/oauth/connect"
 TOKEN_URL = "https://api.etsy.com/v3/public/oauth/token"
-USER_URL = "https://openapi.etsy.com/v3/application/users/{user_id}"
+SHOPS_URL = "https://openapi.etsy.com/v3/application/users/{user_id}/shops"
 
 
 def _b64url(data: bytes) -> str:
@@ -58,13 +58,16 @@ def exchange_code_for_token(client_id: str, redirect_uri: str, code: str, code_v
     return response.json()
 
 
-def fetch_shop_id(client_id: str, access_token: str) -> str | None:
+def fetch_shop_id(client_id: str, shared_secret: str, access_token: str) -> str | None:
     user_id = access_token.split(".", 1)[0]
     if not user_id.isdigit():
         return None
     response = requests.get(
-        USER_URL.format(user_id=user_id),
-        headers={"x-api-key": client_id, "Authorization": f"Bearer {access_token}"},
+        SHOPS_URL.format(user_id=user_id),
+        headers={
+            "x-api-key": f"{client_id}:{shared_secret}",
+            "Authorization": f"Bearer {access_token}",
+        },
         timeout=30,
     )
     if response.status_code != 200:

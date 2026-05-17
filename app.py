@@ -119,6 +119,7 @@ def auth_etsy_callback():
         return "<h1>Session abgelaufen</h1><p>Bitte /auth/etsy erneut aufrufen.</p>", 400
 
     client_id = os.environ.get("ETSY_API_KEY")
+    shared_secret = os.environ.get("ETSY_SHARED_SECRET", "")
     redirect_uri = os.environ.get("ETSY_REDIRECT_URI")
 
     try:
@@ -131,7 +132,7 @@ def auth_etsy_callback():
     if not access_token:
         return f"<h1>Kein Access Token erhalten</h1><pre>{token_data}</pre>", 500
 
-    shop_id = etsy_auth.fetch_shop_id(client_id, access_token) or ""
+    shop_id = etsy_auth.fetch_shop_id(client_id, shared_secret, access_token) or ""
 
     etsy_auth.update_env({
         "ETSY_ACCESS_TOKEN": access_token,
