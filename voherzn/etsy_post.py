@@ -22,6 +22,7 @@ def post_listing_to_etsy(listing: dict, price: float | None = None) -> dict:
     access_token = _env("ETSY_ACCESS_TOKEN")
     shop_id = _env("ETSY_SHOP_ID")
     shipping_profile_id = _env("ETSY_SHIPPING_PROFILE_ID")
+    readiness_state_id = _env("ETSY_READINESS_STATE_ID")
 
     if not api_key:
         return {"success": False, "error": "ETSY_API_KEY fehlt in .env"}
@@ -33,6 +34,8 @@ def post_listing_to_etsy(listing: dict, price: float | None = None) -> dict:
         return {"success": False, "error": "ETSY_SHOP_ID fehlt - Auth wiederholen."}
     if not shipping_profile_id:
         return {"success": False, "error": "ETSY_SHIPPING_PROFILE_ID fehlt in .env"}
+    if not readiness_state_id:
+        return {"success": False, "error": "ETSY_READINESS_STATE_ID fehlt in .env"}
 
     headers = {
         "x-api-key": f"{api_key}:{shared_secret}",
@@ -53,6 +56,7 @@ def post_listing_to_etsy(listing: dict, price: float | None = None) -> dict:
         "when_made": "made_to_order",
         "taxonomy_id": 68887515,
         "shipping_profile_id": int(shipping_profile_id),
+        "readiness_state_id": int(readiness_state_id),
         "tags": (listing.get("tags") or [])[:13],
         "state": "draft",
     }
