@@ -166,8 +166,7 @@ def etsy_post():
     result = post_listing_to_etsy(
         listing,
         price=data.get("price"),
-        image_data=data.get("image_data"),
-        image_name=data.get("image_name"),
+        images=data.get("images"),
     )
     status = 200 if result.get("success") else (401 if result.get("needs_auth") else 400)
     return jsonify(result), status

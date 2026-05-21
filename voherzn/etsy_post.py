@@ -33,38 +33,38 @@ def _upload_image(
     listing_id: int,
     image_data: str,
     image_name: str | None,
+    rank: int,
     headers: dict,
 ) -> dict:
     try:
         image_bytes, mime = _decode_image(image_data)
     except Exception as exc:
-        return {"uploaded": False, "error": f"Bild konnte nicht dekodiert werden: {exc}"}
+        return {"uploaded": False, "rank": rank, "error": f"Bild konnte nicht dekodiert werden: {exc}"}
 
     ext = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp"}.get(mime, ".jpg")
-    filename = image_name or f"foto{ext}"
+    filename = image_name or f"foto{rank}{ext}"
 
     url = f"https://openapi.etsy.com/v3/application/shops/{shop_id}/listings/{listing_id}/images"
     files = {"image": (filename, image_bytes, mime)}
-    data = {"rank": 1, "overwrite": "true"}
+    data = {"rank": rank, "overwrite": "true"}
 
     upload_headers = {k: v for k, v in headers.items() if k.lower() != "content-type"}
 
     try:
         r = requests.post(url, headers=upload_headers, files=files, data=data, timeout=60)
     except requests.RequestException as exc:
-        return {"uploaded": False, "error": f"Netzwerkfehler beim Bild-Upload: {exc}"}
+        return {"uploaded": False, "rank": rank, "error": f"Netzwerkfehler beim Bild-Upload: {exc}"}
 
     if r.status_code in (200, 201):
-        return {"uploaded": True, "listing_image_id": r.json().get("listing_image_id")}
+        return {"uploaded": True, "rank": rank, "listing_image_id": r.json().get("listing_image_id")}
 
-    return {"uploaded": False, "error": f"Etsy {r.status_code}: {r.text}"}
+    return {"uploaded": False, "rank": rank, "error": f"Etsy {r.status_code}: {r.text}"}
 
 
 def post_listing_to_etsy(
     listing: dict,
     price: float | None = None,
-    image_data: str | None = None,
-    image_name: str | None = None,
+    images: list[dict] | None = None,
 ) -> dict:
     api_key = _env("ETSY_API_KEY")
     shared_secret = _env("ETSY_SHARED_SECRET")
@@ -128,14 +128,26 @@ def post_listing_to_etsy(
             "url": f"https://www.etsy.com/your/shops/me/tools/listings/{listing_id}" if listing_id else None,
         }
 
-        if listing_id and image_data:
-            upload = _upload_image(shop_id, listing_id, image_data, image_name, headers)
-            result["image_uploaded"] = upload.get("uploaded", False)
-            if not upload.get("uploaded"):
-                result["image_error"] = upload.get("error")
-        elif listing_id and not image_data:
-            result["image_uploaded"] = False
-            result["image_error"] = "Kein Bild mitgesendet."
+        if listing_id and images:
+            uploads = []
+            for i, img in enumerate(images, start=1):
+                data = img.get("data") if isinstance(img, dict) else None
+                name = img.get("name") if isinstance(img, dict) else None
+                if not data:
+                    uploads.append({"uploaded": False, "rank": i, "error": "Kein Bilddaten-Feld"})
+                    continue
+                uploads.append(_upload_image(shop_id, listing_id, data, name, i, headers))
+
+            successful = sum(1 for u in uploads if u.get("uploaded"))
+            result["images_total"] = len(uploads)
+            result["images_uploaded"] = successful
+            errors = [u.get("error") for u in uploads if not u.get("uploaded") and u.get("error")]
+            if errors:
+                result["image_errors"] = errors
+        elif listing_id:
+            result["images_total"] = 0
+            result["images_uploaded"] = 0
+            result["image_errors"] = ["Keine Bilder mitgesendet."]
 
         return result
 
