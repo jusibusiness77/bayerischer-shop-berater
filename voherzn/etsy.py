@@ -63,13 +63,13 @@ SAISONALER KONTEXT:
 Erstelle bitte:
 
 TITEL:
-(Max 140 Zeichen, SEO-optimiert, mit relevanten Keywords und Pipes als Trenner, bayerisch-warm)
+(Max 140 Zeichen, KOMPLETT auf Hochdeutsch - kein Dialekt, weil Etsy-SEO. Mit relevanten Keywords und Pipes als Trenner.)
 
 BESCHREIBUNG:
-(Sauberes Hochdeutsch, KEIN bayerischer Dialekt. Maximal 3-4 kurze Absaetze, durch Leerzeilen getrennt. Insgesamt knapp und auf den Punkt - kein Ueberfluss. Erwaehne Material, Anlass und Besonderheit, ohne zu schwafeln.)
+(Hochdeutsch als Grundsprache, aber streue 3-5 bayerische Ausdruecke natuerlich ein - nicht aufgesetzt, nicht jedes zweite Wort. Beispiele fuer bayerische Woerter, die du verwenden darfst (nicht alle, nur passend): "vui" (viel), "gscheit" (ordentlich/schoen), "a echtes" (ein echtes), "Herzstueckerl", "gmacht" (gemacht), "Liab" (Liebe), "schee" (schoen), "halt" (eben), "ned" (nicht), "bisserl" (bisschen). Maximal 3-4 kurze Absaetze, durch Leerzeilen getrennt. Knapp und auf den Punkt. Erwaehne Material, Anlass und Besonderheit.)
 
 TAGS:
-(Genau 13 Tags, jeweils max 20 Zeichen, kommagetrennt, SEO-relevant)
+(Genau 13 Tags, jeweils max 20 Zeichen, kommagetrennt, SEO-relevant, komplett auf Hochdeutsch - kein Dialekt, weil Suchanfragen.)
 
 Antworte NUR mit TITEL:, BESCHREIBUNG: und TAGS: Abschnitten."""
 
